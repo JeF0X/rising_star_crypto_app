@@ -1,21 +1,19 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class HttpService {
-  static const int statusOk = 200;
-
-  Future<Map<String, dynamic>?> sendRequest(String url) async {
+  Future<dynamic> sendRequest(String url) async {
     http.Response response = await http.get(Uri.parse(url));
-    if (response.statusCode == statusOk) {
-      log('Request URL: $url');
-      log('Response status: ${response.statusCode}');
+    log('Request URL: $url');
+    log('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 && response.body.isNotEmpty) {
       var jsonBody = json.decode(response.body);
       return jsonBody;
     } else {
-      // TODO: Handle exceptions
-      throw Exception('Could not load data');
+      throw HttpException('Problem loading data', uri: Uri.parse(url));
     }
   }
 }

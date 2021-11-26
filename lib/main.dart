@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:rising_star_crypto_app/models/market_chart.dart';
+import 'package:rising_star_crypto_app/models/market_chart_data.dart';
 import 'package:rising_star_crypto_app/services/coin_gecko_data.dart';
 
 void main() {
@@ -32,33 +32,48 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   var downwardTrendLenght = 0;
-  var endTime = '';
+
+  var coin = 'bitcoin';
+  var currency = 'usd';
+  var endTime =
+      DateTime.fromMillisecondsSinceEpoch(1637673569 * 1000, isUtc: true);
 
   int day = 1;
   int month = 1;
   int year = 0;
+  String longestDownwardTrendText = '';
 
-  void _longestDownwardTrend(DateTime startTime) async {
-    var marketChart = MarketChart(
-      coin: 'bitcoin',
-      currency: 'usd',
-      startTime: startTime,
-      endTime:
-          DateTime.fromMillisecondsSinceEpoch(1637673569 * 1000, isUtc: true),
-    );
-
+  Future<void> _highestTradingVolume(DateTime startTime) async {
     var data = CoinGeckoData.instance;
-    var prices = await data.getPricesWithinRange(marketChart);
-    var longestDownwardTrend =
-        marketChart.longestDownwardTrendWithinRange(prices);
+    try {
+      var tradingVolumes = await data.getDailyTotalVolumesWithinRange(
+          coin: coin, vsCurrency: currency, from: startTime, to: endTime);
+      var highestTradingVolume =
+          MarketChartData.getHighestDailyTradingVolume(tradingVolumes);
+      log('Highest trading volume was ${highestTradingVolume.value.toString()} on ${highestTradingVolume.key.toString()}');
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 
-    log('Longest downward trend of ${longestDownwardTrend.length} days between ${marketChart.startTime} and ${marketChart.endTime} was from ${longestDownwardTrend.keys.first} to ${longestDownwardTrend.keys.last}');
+  Future<void> _longestDownwardTrend(DateTime startTime) async {
+    var data = CoinGeckoData.instance;
+    try {
+      var prices = await data.getDailyPricesWithinRange(
+          coin: coin, vsCurrency: currency, from: startTime, to: endTime);
+      var longestDownwardTrend =
+          MarketChartData.getLongestDownwardTrendWithinRange(prices);
 
-    setState(() {
-      _counter++;
-    });
+      log('Longest downward trend of ${longestDownwardTrend.length - 1} days between $startTime and $endTime was from ${longestDownwardTrend.keys.first} to ${longestDownwardTrend.keys.last}');
+
+      setState(() {
+        longestDownwardTrendText =
+            'Longest downward trend of ${longestDownwardTrend.length - 1} days between ${prices.keys.first} and ${prices.keys.last} was from ${longestDownwardTrend.keys.first} to ${longestDownwardTrend.keys.last}';
+      });
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   @override
@@ -89,22 +104,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 year = int.tryParse(value) ?? 2020;
               },
             ),
-            const Text(
-              'You have pushed the button this many times:',
-            ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              longestDownwardTrendText,
             ),
             TextButton(
-              onPressed: () => _longestDownwardTrend(
-                DateTime.utc(year, month, day),
-              ),
-              child: Text('test'),
+              onPressed: () => _onPressed(),
+              child: const Text('Test Downward Trend'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _onPressed() async {
+    await _highestTradingVolume(DateTime.utc(year, month, day));
+    await _longestDownwardTrend(DateTime.utc(year, month, day));
   }
 }

@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:rising_star_crypto_app/services/http_service.dart';
 
 // API Documentation: https://www.coingecko.com/en/api/documentation
@@ -18,13 +21,19 @@ class CoinGeckoService {
     required int unixTimeFrom,
     required int unixTimeTo,
   }) async {
-    var url = _apiUrl +
-        'coins/$coin/market_chart/range?vs_currency=$vsCurrency&from=$unixTimeFrom&to=$unixTimeTo';
-    var marketChartData = await httpService.sendRequest(url);
-    if (marketChartData != null) {
-      return marketChartData;
-    } else {
-      throw Exception('Data was null');
+    try {
+      var url = _apiUrl +
+          'coins/$coin/market_chart/range?vs_currency=$vsCurrency&from=$unixTimeFrom&to=$unixTimeTo';
+      var marketChartData = await httpService.sendRequest(url);
+      if (marketChartData != null && marketChartData is Map<String, dynamic>) {
+        return marketChartData;
+      } else {
+        //Create custom exception
+        throw Exception('Data was null or not what expected');
+      }
+    } on HttpException catch (e) {
+      log(e.toString());
+      rethrow;
     }
   }
 }

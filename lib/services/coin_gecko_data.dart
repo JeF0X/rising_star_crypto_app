@@ -1,4 +1,4 @@
-import 'package:rising_star_crypto_app/models/market_chart.dart';
+import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/services/coin_gecko_service.dart';
 import 'package:rising_star_crypto_app/services/crypto_data.dart';
 
@@ -15,60 +15,86 @@ class CoinGeckoData implements CryptoData {
   final CoinGeckoService service = CoinGeckoService.instance;
 
   @override
-  Future<Map<DateTime, double>> getDailyhVolumeWithinRange(
-      MarketChart marketChart) async {
-    var jsonData = await _getMarketChartData(marketChart);
+  Future<Map<DateTime, double>> getDailyTotalVolumesWithinRange({
+    required String coin,
+    required String vsCurrency,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    var jsonData = await _getMarketChartData(coin, vsCurrency, from, to);
     List<dynamic> totalVolumes = jsonData['total_volumes'];
-    return _parseMarketChartData(totalVolumes);
+
+    var allTotalVolumesWithinRange = _parseMarketChartData(totalVolumes);
+    var dailyTotalVolumesWithinRange = Helpers.getDailyValuesWithinRange(
+        allValuesWithinRange: allTotalVolumesWithinRange, from: from, to: to);
+    return dailyTotalVolumesWithinRange;
   }
 
   @override
-  Future<Map<DateTime, double>> getMarketCapsWithinRange(
-      MarketChart marketChart) async {
-    var jsonData = await _getMarketChartData(marketChart);
+  Future<Map<DateTime, double>> getDailyMarketCapsWithinRange({
+    required String coin,
+    required String vsCurrency,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    var jsonData = await _getMarketChartData(coin, vsCurrency, from, to);
     List<dynamic> marketCaps = jsonData['market_caps'];
-    return _parseMarketChartData(marketCaps);
+    var allMarketCapsWihtinRange = _parseMarketChartData(marketCaps);
+    var dailyMarketCapsWithinRange = Helpers.getDailyValuesWithinRange(
+        allValuesWithinRange: allMarketCapsWihtinRange, from: from, to: to);
+    return dailyMarketCapsWithinRange;
   }
 
   @override
-  Future<Map<DateTime, double>> getPricesWithinRange(
-      MarketChart marketChart) async {
-    var jsonData = await _getMarketChartData(marketChart);
-    List<dynamic> prices = jsonData['prices'];
-    return _parseMarketChartData(prices);
+  Future<Map<DateTime, double>> getDailyPricesWithinRange({
+    required String coin,
+    required String vsCurrency,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    var jsonData = await _getMarketChartData(coin, vsCurrency, from, to);
+    List<dynamic> pricesData = jsonData['prices'];
+    var allPricesWithinRange = _parseMarketChartData(pricesData);
+    var dailyPricesWithinRange = Helpers.getDailyValuesWithinRange(
+        allValuesWithinRange: allPricesWithinRange, from: from, to: to);
+    return dailyPricesWithinRange;
   }
 
   Future<Map<String, dynamic>> _getMarketChartData(
-      MarketChart marketChart) async {
-    if (lastCoin == marketChart.coin &&
-        lastCurrency == marketChart.currency &&
-        lastStartTime == marketChart.startTime &&
-        lastEndTime == marketChart.endTime &&
+      String coin, String currency, DateTime from, DateTime to) async {
+    if (lastCoin == coin &&
+        lastCurrency == currency &&
+        lastStartTime == from &&
+        lastEndTime == to &&
         _lastMarketChartData != null) {
       // TODO: Handle errors
       return Future.value(_lastMarketChartData);
     }
 
     var jsonData = await service.getMarketChartRange(
-      coin: marketChart.coin,
-      vsCurrency: marketChart.currency,
-      unixTimeFrom:
-          marketChart.startTime.millisecondsSinceEpoch ~/ 1000 - 86400,
-      unixTimeTo: marketChart.endTime.millisecondsSinceEpoch ~/ 1000 + 86400,
+      coin: coin,
+      vsCurrency: currency,
+      unixTimeFrom: from.millisecondsSinceEpoch ~/ 1000 - 86400,
+      unixTimeTo: to.millisecondsSinceEpoch ~/ 1000 + 86400,
     );
     _lastMarketChartData = jsonData;
-    lastCoin = marketChart.coin;
-    lastCurrency = marketChart.currency;
-    lastStartTime = marketChart.startTime;
-    lastEndTime = marketChart.endTime;
+    lastCoin = coin;
+    lastCurrency = currency;
+    lastStartTime = from;
+    lastEndTime = to;
     return jsonData;
   }
 
   Map<DateTime, double> _parseMarketChartData(List<dynamic> data) {
     Map<DateTime, double> dataMap = {};
+
     for (var item in data) {
       DateTime time = DateTime.fromMillisecondsSinceEpoch(item[0], isUtc: true);
-      dataMap[time] = item[1];
+      if (item[1] is double) {
+        dataMap[time] = item[1];
+      } else {
+        dataMap[time] = double.tryParse(item[1].toString()) ?? -1;
+      }
     }
     return dataMap;
   }
