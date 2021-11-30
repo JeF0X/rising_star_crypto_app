@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var coin = 'bitcoin';
   var currency = 'usd';
   var endTime =
-      DateTime.fromMillisecondsSinceEpoch(1637673569 * 1000, isUtc: true);
+      DateTime.fromMillisecondsSinceEpoch(1621468800 * 1000, isUtc: true);
 
   int day = 1;
   int month = 1;
@@ -71,6 +71,17 @@ class _MyHomePageState extends State<MyHomePage> {
         longestDownwardTrendText =
             'Longest downward trend of ${longestDownwardTrend.length - 1} days between ${prices.keys.first} and ${prices.keys.last} was from ${longestDownwardTrend.keys.first} to ${longestDownwardTrend.keys.last}';
       });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> _bestTimeToBuyAndSell(DateTime startTime) async {
+    var data = CoinGeckoData.instance;
+    try {
+      var prices = await data.getDailyPricesWithinRange(
+          coin: coin, vsCurrency: currency, from: startTime, to: endTime);
+      MarketChartData.calculateBestBuySellTimes(prices);
     } catch (e) {
       log(e.toString());
     }
@@ -120,5 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onPressed() async {
     await _highestTradingVolume(DateTime.utc(year, month, day));
     await _longestDownwardTrend(DateTime.utc(year, month, day));
+    await _bestTimeToBuyAndSell(DateTime.utc(year, month, day));
   }
 }
