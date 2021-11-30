@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var coin = 'bitcoin';
   var currency = 'usd';
   var endTime =
-      DateTime.fromMillisecondsSinceEpoch(1621468800 * 1000, isUtc: true);
+      DateTime.fromMillisecondsSinceEpoch(1632960000 * 1000, isUtc: true);
 
   int day = 1;
   int month = 1;

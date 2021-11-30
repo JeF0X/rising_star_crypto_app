@@ -38,6 +38,7 @@ class MarketChartData {
 
   static void calculateBestBuySellTimes(
       Map<DateTime, double> pricesWithinRange) {
+    // TODO: Calculate in a new thread
     List<MapEntry<DateTime, double>> pricesLowToHigh =
         pricesWithinRange.entries.toList();
 
@@ -50,21 +51,27 @@ class MarketChartData {
     });
     MapEntry<DateTime, double>? bestBuyEntry;
     MapEntry<DateTime, double>? bestSellEntry;
+
+    int iterations = 0;
     for (int index = pricesLowToHigh.length - 1; index >= 0; index--) {
       for (var item in pricesLowToHigh) {
+        iterations++;
         if (item.key == pricesLowToHigh[index].key) {
           break;
         }
         if (item.key.isBefore(pricesLowToHigh[index].key) &&
             item.value < pricesLowToHigh[index].value) {
-          bestBuyEntry = item;
-          bestSellEntry = pricesLowToHigh[index];
-
-          break;
+          if (bestBuyEntry == null ||
+              bestSellEntry == null ||
+              (bestBuyEntry.value / bestSellEntry.value >
+                  item.value / pricesLowToHigh[index].value)) {
+            bestBuyEntry = item;
+            bestSellEntry = pricesLowToHigh[index];
+          }
         }
       }
       if (bestBuyEntry != null) {
-        break;
+        // break;
       }
     }
 
@@ -74,5 +81,6 @@ class MarketChartData {
     } else {
       log('Not found');
     }
+    log('Iterations: $iterations');
   }
 }
