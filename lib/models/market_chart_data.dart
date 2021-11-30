@@ -49,8 +49,8 @@ class MarketChartData {
         return -1;
       }
     });
-    MapEntry<DateTime, double>? bestBuyEntry;
-    MapEntry<DateTime, double>? bestSellEntry;
+    MapEntry<DateTime, double> bestBuyEntry = MapEntry(DateTime.now(), -1.0);
+    MapEntry<DateTime, double> bestSellEntry = MapEntry(DateTime.now(), 1.0);
 
     int iterations = 0;
     for (int index = pricesLowToHigh.length - 1; index >= 0; index--) {
@@ -61,21 +61,16 @@ class MarketChartData {
         }
         if (item.key.isBefore(pricesLowToHigh[index].key) &&
             item.value < pricesLowToHigh[index].value) {
-          if (bestBuyEntry == null ||
-              bestSellEntry == null ||
-              (bestBuyEntry.value / bestSellEntry.value >
-                  item.value / pricesLowToHigh[index].value)) {
+          if (bestSellEntry.value / bestBuyEntry.value <
+              pricesLowToHigh[index].value / item.value) {
             bestBuyEntry = item;
             bestSellEntry = pricesLowToHigh[index];
           }
         }
       }
-      if (bestBuyEntry != null) {
-        // break;
-      }
     }
 
-    if (bestBuyEntry != null && bestSellEntry != null) {
+    if (bestBuyEntry.value > 0.0) {
       log('Best time to buy is ${bestBuyEntry.key.toString()} and sell ${bestSellEntry.key.toString()}');
       log('Low price: ${bestBuyEntry.value.toString()}, high price: ${bestSellEntry.value.toString()}');
     } else {
