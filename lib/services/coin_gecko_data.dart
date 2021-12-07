@@ -1,4 +1,5 @@
 import 'package:rising_star_crypto_app/common/helpers.dart';
+import 'package:rising_star_crypto_app/models/date_value.dart';
 import 'package:rising_star_crypto_app/services/coin_gecko_service.dart';
 import 'package:rising_star_crypto_app/services/crypto_data.dart';
 
@@ -15,7 +16,7 @@ class CoinGeckoData implements CryptoData {
   final CoinGeckoService service = CoinGeckoService.instance;
 
   @override
-  Future<Map<DateTime, double>> getDailyTotalVolumesWithinRange({
+  Future<List<DateValue>> getDailyTotalVolumesWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
@@ -31,7 +32,7 @@ class CoinGeckoData implements CryptoData {
   }
 
   @override
-  Future<Map<DateTime, double>> getDailyMarketCapsWithinRange({
+  Future<List<DateValue>> getDailyMarketCapsWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
@@ -46,7 +47,7 @@ class CoinGeckoData implements CryptoData {
   }
 
   @override
-  Future<Map<DateTime, double>> getDailyPricesWithinRange({
+  Future<List<DateValue>> getDailyPricesWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
@@ -85,17 +86,23 @@ class CoinGeckoData implements CryptoData {
     return jsonData;
   }
 
-  Map<DateTime, double> _parseMarketChartData(List<dynamic> data) {
+  List<DateValue> _parseMarketChartData(List<dynamic> data) {
     Map<DateTime, double> dataMap = {};
+    List<DateValue> dateValues = [];
 
     for (var item in data) {
       DateTime time = DateTime.fromMillisecondsSinceEpoch(item[0], isUtc: true);
+
       if (item[1] is double) {
         dataMap[time] = item[1];
+        dateValues.add(DateValue(time, item[1]));
       } else {
         dataMap[time] = double.tryParse(item[1].toString()) ?? -1;
+        var value = double.tryParse(item[1].toString()) ?? -1;
+
+        dateValues.add(DateValue(time, value));
       }
     }
-    return dataMap;
+    return dateValues;
   }
 }

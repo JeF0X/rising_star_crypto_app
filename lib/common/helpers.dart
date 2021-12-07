@@ -1,3 +1,5 @@
+import 'package:rising_star_crypto_app/models/date_value.dart';
+
 class Helpers {
   static bool isSameDay(DateTime dayA, DateTime dayB) {
     if (dayA.day == dayB.day &&
@@ -8,70 +10,70 @@ class Helpers {
     return false;
   }
 
-  static Map<DateTime, double> getDailyValuesWithinRange({
-    required Map<DateTime, double> allValuesWithinRange,
+  static List<DateValue> getDailyValuesWithinRange({
+    required List<DateValue> allValuesWithinRange,
     required DateTime from,
     required DateTime to,
   }) {
-    Map<DateTime, double> dailyValuesWithinRange =
-        Map.from(allValuesWithinRange);
+    List<DateValue> dailyValuesWithinRange = List.from(allValuesWithinRange);
 
-    List<DateTime> entriesToBeRemoved = [];
-    MapEntry<DateTime, double> lastEntry =
-        MapEntry(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
-    for (var entry in dailyValuesWithinRange.entries) {
-      if (Helpers.isSameDay(entry.key, lastEntry.key)) {
-        entriesToBeRemoved.add(entry.key);
+    List<DateValue> entriesToBeRemoved = [];
+    DateValue lastItem =
+        DateValue(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
+    for (var item in dailyValuesWithinRange) {
+      if (Helpers.isSameDay(item.date, lastItem.date)) {
+        entriesToBeRemoved.add(item);
         continue;
       }
-      lastEntry = entry;
+      lastItem = item;
     }
     dailyValuesWithinRange
-        .removeWhere((key, value) => entriesToBeRemoved.contains(key));
+        .removeWhere((item) => entriesToBeRemoved.contains(item));
 
-    dailyValuesWithinRange.removeWhere((key, value) => (key.isBefore(from)));
-    dailyValuesWithinRange.removeWhere((key, value) {
-      var firstOfLastDay = dailyValuesWithinRange.keys
-          .firstWhere((element) => Helpers.isSameDay(element, to));
-      return key.isAfter(firstOfLastDay);
+    dailyValuesWithinRange.removeWhere((item) => (item.date.isBefore(from)));
+    dailyValuesWithinRange.removeWhere((item) {
+      var firstDataPointOfLastDay = dailyValuesWithinRange
+          .firstWhere((element) => Helpers.isSameDay(element.date, to));
+      return item.date.isAfter(firstDataPointOfLastDay.date);
     });
+
     return dailyValuesWithinRange;
   }
 
-  static Map<DateTime, double> getLongestTrend({
-    required Map<DateTime, double> valuesWithinRange,
+  static List<DateValue> getLongestTrend({
+    required List<DateValue> valuesWithinRange,
     bool isDownward = true,
   }) {
-    Map<DateTime, double> longestTrend = {};
+    List<DateValue> longestTrend = [];
 
-    MapEntry<DateTime, double> lastEntry =
-        MapEntry(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
+    DateValue lastEntry =
+        DateValue(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
 
-    Map<DateTime, double> trend = {};
+    List<DateValue> trend = [];
 
 // TODO: Make cleaner
-    for (var item in valuesWithinRange.entries) {
+    for (var datapoint in valuesWithinRange) {
       if (isDownward &&
-          !Helpers.isSameDay(item.key, lastEntry.key) &&
-          item.value < lastEntry.value) {
+          !Helpers.isSameDay(datapoint.date, lastEntry.date) &&
+          datapoint.value < lastEntry.value) {
         if (trend.isEmpty) {
-          trend[lastEntry.key] = lastEntry.value;
+          trend.add(lastEntry);
         }
-        trend[item.key] = item.value;
+        trend.add(datapoint);
       } else if (!isDownward &&
-          !Helpers.isSameDay(item.key, lastEntry.key) &&
-          item.value > lastEntry.value) {
+          !Helpers.isSameDay(datapoint.date, lastEntry.date) &&
+          datapoint.value > lastEntry.value) {
         if (trend.isEmpty) {
-          trend[lastEntry.key] = lastEntry.value;
+          trend.add(lastEntry);
         }
-        trend[item.key] = item.value;
+        trend.add(datapoint);
       } else {
         if (longestTrend.length < trend.length) {
-          longestTrend = Map.from(trend);
+          longestTrend = List.from(trend);
         }
         trend.clear();
       }
-      lastEntry = item;
+      lastEntry = datapoint;
     }
     return longestTrend;
   }

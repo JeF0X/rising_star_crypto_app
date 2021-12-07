@@ -1,17 +1,19 @@
+import 'package:rising_star_crypto_app/models/date_value.dart';
+
 abstract class CryptoData {
-  Future<Map<DateTime, double>> getDailyPricesWithinRange({
+  Future<List<DateValue>> getDailyPricesWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
     required DateTime to,
   });
-  Future<Map<DateTime, double>> getDailyMarketCapsWithinRange({
+  Future<List<DateValue>> getDailyMarketCapsWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
     required DateTime to,
   });
-  Future<Map<DateTime, double>> getDailyTotalVolumesWithinRange({
+  Future<List<DateValue>> getDailyTotalVolumesWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
