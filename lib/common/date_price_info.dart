@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:rising_star_crypto_app/models/date_value.dart';
 
-class DatePriceInfo extends StatelessWidget {
+class DateValueInfo extends StatelessWidget {
   final String title;
-  final DateTime date;
-  final double price;
-  const DatePriceInfo(
-      {Key? key, required this.title, required this.date, required this.price})
-      : super(key: key);
+  final DateValueData? dateValue;
+  const DateValueInfo({
+    Key? key,
+    required this.title,
+    required this.dateValue,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +17,23 @@ class DatePriceInfo extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 32.0),
+          style: const TextStyle(fontSize: 28.0),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '${date.day}.${date.month}.${date.year}',
+              dateValue == null
+                  ? 'No Data'
+                  : '${dateValue!.date.day}.${dateValue!.date.month}.${dateValue!.date.year}',
               style: const TextStyle(
                 fontSize: 24.0,
               ),
             ),
             Text(
-              '\$$price',
+              dateValue == null
+                  ? 'No Data'
+                  : '\$${dateValue!.value.toStringAsFixed(2)}',
               style: const TextStyle(fontSize: 24.0),
             ),
           ],

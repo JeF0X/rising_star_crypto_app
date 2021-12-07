@@ -10,16 +10,17 @@ class Helpers {
     return false;
   }
 
-  static List<DateValue> getDailyValuesWithinRange({
-    required List<DateValue> allValuesWithinRange,
+  static List<DateValueData> getDailyValuesWithinRange({
+    required List<DateValueData> allValuesWithinRange,
     required DateTime from,
     required DateTime to,
   }) {
-    List<DateValue> dailyValuesWithinRange = List.from(allValuesWithinRange);
+    List<DateValueData> dailyValuesWithinRange =
+        List.from(allValuesWithinRange);
 
-    List<DateValue> entriesToBeRemoved = [];
-    DateValue lastItem =
-        DateValue(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
+    List<DateValueData> entriesToBeRemoved = [];
+    DateValueData lastItem = DateValueData(
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
     for (var item in dailyValuesWithinRange) {
       if (Helpers.isSameDay(item.date, lastItem.date)) {
         entriesToBeRemoved.add(item);
@@ -40,16 +41,16 @@ class Helpers {
     return dailyValuesWithinRange;
   }
 
-  static List<DateValue> getLongestTrend({
-    required List<DateValue> valuesWithinRange,
+  static List<DateValueData> getLongestTrend({
+    required List<DateValueData> valuesWithinRange,
     bool isDownward = true,
   }) {
-    List<DateValue> longestTrend = [];
+    List<DateValueData> longestTrend = [];
 
-    DateValue lastEntry =
-        DateValue(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
+    DateValueData lastEntry = DateValueData(
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
 
-    List<DateValue> trend = [];
+    List<DateValueData> trend = [];
 
 // TODO: Make cleaner
     for (var datapoint in valuesWithinRange) {

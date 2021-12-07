@@ -16,7 +16,7 @@ class CoinGeckoData implements CryptoData {
   final CoinGeckoService service = CoinGeckoService.instance;
 
   @override
-  Future<List<DateValue>> getDailyTotalVolumesWithinRange({
+  Future<List<DateValueData>> getDailyTotalVolumesWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
@@ -32,7 +32,7 @@ class CoinGeckoData implements CryptoData {
   }
 
   @override
-  Future<List<DateValue>> getDailyMarketCapsWithinRange({
+  Future<List<DateValueData>> getDailyMarketCapsWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
@@ -47,7 +47,7 @@ class CoinGeckoData implements CryptoData {
   }
 
   @override
-  Future<List<DateValue>> getDailyPricesWithinRange({
+  Future<List<DateValueData>> getDailyPricesWithinRange({
     required String coin,
     required String vsCurrency,
     required DateTime from,
@@ -86,21 +86,21 @@ class CoinGeckoData implements CryptoData {
     return jsonData;
   }
 
-  List<DateValue> _parseMarketChartData(List<dynamic> data) {
+  List<DateValueData> _parseMarketChartData(List<dynamic> data) {
     Map<DateTime, double> dataMap = {};
-    List<DateValue> dateValues = [];
+    List<DateValueData> dateValues = [];
 
     for (var item in data) {
       DateTime time = DateTime.fromMillisecondsSinceEpoch(item[0], isUtc: true);
 
       if (item[1] is double) {
         dataMap[time] = item[1];
-        dateValues.add(DateValue(time, item[1]));
+        dateValues.add(DateValueData(time, item[1]));
       } else {
         dataMap[time] = double.tryParse(item[1].toString()) ?? -1;
         var value = double.tryParse(item[1].toString()) ?? -1;
 
-        dateValues.add(DateValue(time, value));
+        dateValues.add(DateValueData(time, value));
       }
     }
     return dateValues;

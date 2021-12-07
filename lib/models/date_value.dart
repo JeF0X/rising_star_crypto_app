@@ -1,6 +1,6 @@
-class DateValue {
+class DateValueData {
   DateTime date;
   double value;
 
-  DateValue(this.date, this.value);
+  DateValueData(this.date, this.value);
 }
