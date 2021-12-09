@@ -1,3 +1,4 @@
+import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/models/date_value.dart';
 import 'package:rising_star_crypto_app/services/coin_gecko_service.dart';
@@ -17,12 +18,15 @@ class CoinGeckoData implements CryptoData {
 
   @override
   Future<List<DateValueData>> getDailyTotalVolumesWithinRange({
-    required String coin,
-    required String vsCurrency,
+    required Coin coin,
+    required Currency vsCurrency,
     required DateTime from,
     required DateTime to,
   }) async {
-    var jsonData = await _getMarketChartData(coin, vsCurrency, from, to);
+    var coinString = coinGeckoCoins(coin);
+    var currencyString = coinGeckoCurrencies(vsCurrency);
+    var jsonData =
+        await _getMarketChartData(coinString, currencyString, from, to);
     List<dynamic> totalVolumes = jsonData['total_volumes'];
 
     var allTotalVolumesWithinRange = _parseMarketChartData(totalVolumes);
@@ -33,12 +37,15 @@ class CoinGeckoData implements CryptoData {
 
   @override
   Future<List<DateValueData>> getDailyMarketCapsWithinRange({
-    required String coin,
-    required String vsCurrency,
+    required Coin coin,
+    required Currency vsCurrency,
     required DateTime from,
     required DateTime to,
   }) async {
-    var jsonData = await _getMarketChartData(coin, vsCurrency, from, to);
+    var coinString = coinGeckoCoins(coin);
+    var currencyString = coinGeckoCurrencies(vsCurrency);
+    var jsonData =
+        await _getMarketChartData(coinString, currencyString, from, to);
     List<dynamic> marketCaps = jsonData['market_caps'];
     var allMarketCapsWihtinRange = _parseMarketChartData(marketCaps);
     var dailyMarketCapsWithinRange = Helpers.getDailyValuesWithinRange(
@@ -48,12 +55,15 @@ class CoinGeckoData implements CryptoData {
 
   @override
   Future<List<DateValueData>> getDailyPricesWithinRange({
-    required String coin,
-    required String vsCurrency,
+    required Coin coin,
+    required Currency vsCurrency,
     required DateTime from,
     required DateTime to,
   }) async {
-    var jsonData = await _getMarketChartData(coin, vsCurrency, from, to);
+    var coinString = coinGeckoCoins(coin);
+    var currencyString = coinGeckoCurrencies(vsCurrency);
+    var jsonData =
+        await _getMarketChartData(coinString, currencyString, from, to);
     List<dynamic> pricesData = jsonData['prices'];
     var allPricesWithinRange = _parseMarketChartData(pricesData);
     var dailyPricesWithinRange = Helpers.getDailyValuesWithinRange(

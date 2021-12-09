@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:rising_star_crypto_app/common/constants.dart';
+import 'package:rising_star_crypto_app/common/minimal_dropdown_button.dart';
 import 'package:rising_star_crypto_app/common/text_field_date_picker.dart';
-import 'package:rising_star_crypto_app/data_widgets/buy_and_sell_info.dart';
-import 'package:rising_star_crypto_app/data_widgets/highest_trading_volume_info.dart';
-import 'package:rising_star_crypto_app/data_widgets/longest_trend_info.dart';
-import 'package:rising_star_crypto_app/models/date_value.dart';
 import 'package:rising_star_crypto_app/models/market_data.dart';
+import 'package:rising_star_crypto_app/screens/market_data_options_display.dart';
 
 class MarketDataScreen extends StatefulWidget {
   const MarketDataScreen({Key? key}) : super(key: key);
@@ -16,55 +13,13 @@ class MarketDataScreen extends StatefulWidget {
 }
 
 class _MarketDataScreenState extends State<MarketDataScreen> {
-  void _onPressed(MarketData marketData) async {
-    await _setData(marketData);
-    // await _longestDownwardTrend(marketData);
-    // await _bestTimeToBuyAndSell(marketData);
-  }
-
-  var downwardTrendLenght = 0;
-  var coin = 'bitcoin';
-  var currency = 'usd';
-  DateTime? startDate;
-  DateTime endDate = DateTime.now();
-  String longestDownwardTrendText = '';
-  String dropdownValue = 'Longest downward trend';
-  TextEditingController fromController = TextEditingController();
-  TextEditingController toController = TextEditingController();
-
-  DateValueData? highestTradingVolume;
-  List<DateValueData> longestDownwardTrend = [];
-  List<DateValueData> bestBuySellTimes = [];
-
+  MarketData marketData = MarketData(
+    dateTimeRange: DateTimeRange(start: DateTime.now(), end: DateTime.now()),
+    coin: Coin.btc,
+    currency: Currency.usd,
+  );
+  bool isDataChanged = false;
   bool isLoading = false;
-
-  Future<void> _setData(MarketData marketData) async {
-    setState(() {
-      highestTradingVolume = null;
-      longestDownwardTrend.clear();
-      bestBuySellTimes.clear();
-      isLoading = true;
-    });
-
-    try {
-      var _highestTradingVolume =
-          await marketData.getHighestDailyTradingVolume();
-      var _longestDownwardTrend =
-          await marketData.getLongestDownwardTrendWithinRange();
-      var _bestBuySellTimes = await marketData.calculateBestBuySellTimes();
-      setState(() {
-        highestTradingVolume = _highestTradingVolume;
-        longestDownwardTrend = _longestDownwardTrend;
-        bestBuySellTimes = _bestBuySellTimes;
-      });
-    } catch (e) {
-      log(e.toString());
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -73,16 +28,42 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MinimalDropDownButton<Currency>(
+                  value: marketData.currency,
+                  values: Currency.values,
+                  menuItemChild: (value) => getCurrencyText(value),
+                  onChanged: (value) {
+                    setState(() {
+                      isDataChanged = true;
+                      marketData.currency = value;
+                    });
+                  },
+                ),
+                MinimalDropDownButton<Coin>(
+                  value: marketData.coin,
+                  values: Coin.values,
+                  menuItemChild: (value) => getCoinText(value),
+                  onChanged: (value) {
+                    setState(() {
+                      isDataChanged = true;
+                      marketData.coin = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Row(
               children: [
                 Expanded(
                   child: TextFieldDatePicker(
-                    controller: fromController,
-                    initialDate: startDate,
+                    initialDate: marketData.dateRange.start,
                     onPressed: (date) async {
                       setState(() {
-                        startDate = date;
-                        fromController.text =
-                            '${date.day}/${date.month}/${date.year}';
+                        isDataChanged = true;
+                        marketData.dateRange = DateTimeRange(
+                            start: date, end: marketData.dateRange.end);
                       });
                     },
                   ),
@@ -96,118 +77,49 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
                 ),
                 Expanded(
                   child: TextFieldDatePicker(
-                    controller: toController,
-                    initialDate: endDate,
+                    initialDate: marketData.dateRange.end,
                     onPressed: (date) async {
                       setState(() {
-                        endDate = date;
-                        toController.text =
-                            '${date.day}/${date.month}/${date.year}';
+                        isDataChanged = true;
+                        marketData.dateRange = DateTimeRange(
+                            start: marketData.dateRange.start, end: date);
                       });
                     },
                   ),
                 ),
               ],
             ),
-            Container(
-              decoration: BoxDecoration(border: Border.all()),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: DropdownButton<String>(
-                      value: dropdownValue,
-                      isExpanded: true,
-                      iconSize: 24,
-                      elevation: 16,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      isDense: true,
-                      underline: Container(
-                        height: 1.0,
-                        color: Colors.transparent,
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        'Longest downward trend',
-                        'Highest trading volume',
-                        'Best days to buy and sell',
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: const TextStyle(fontSize: 18.0),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  Container(
-                    decoration: (const BoxDecoration(
-                        border: Border(top: BorderSide()))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: BuyAndSellInfo(
-                        buyData: bestBuySellTimes.isNotEmpty
-                            ? bestBuySellTimes.first
-                            : null,
-                        sellData: bestBuySellTimes.isNotEmpty
-                            ? bestBuySellTimes.last
-                            : null,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8.0),
-            Container(
-              decoration: BoxDecoration(border: Border.all()),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: HighestTradingVolumeInfo(
-                  data: highestTradingVolume,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8.0),
-            Container(
-              decoration: BoxDecoration(border: Border.all()),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: LongestTrendInfo(
-                  trend: longestDownwardTrend,
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: (startDate == null || isLoading)
-                  ? null
-                  : () => _onPressed(
-                        MarketData(
-                          dateTimeRange: DateTimeRange(
-                            start: startDate!,
-                            end: endDate,
-                          ),
-                          coin: coin,
-                          currency: currency,
-                        ),
-                      ),
-              child: const Text('SEARCH'),
+            MarketDataOptionsDisplay(
+              marketData: marketData,
+              isDataChanged: isDataChanged,
+              child: _buildChild(),
             ),
           ],
         ),
-        isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : const SizedBox()
       ],
     );
+  }
+
+  Widget? _buildChild() {
+    if (isLoading) {
+      return const CircularProgressIndicator();
+    }
+    if (isDataChanged) {
+      return ElevatedButton(
+        child: Text('REFRESH'),
+        onPressed: () async {
+          setState(() {
+            isLoading = true;
+          });
+          await marketData.updateMarketData();
+          setState(() {
+            marketData;
+            isLoading = false;
+            isDataChanged = false;
+          });
+        },
+      );
+    }
+    return null;
   }
 }

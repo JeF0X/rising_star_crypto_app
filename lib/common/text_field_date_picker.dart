@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 
-class TextFieldDatePicker extends StatelessWidget {
-  final TextEditingController controller;
+class TextFieldDatePicker extends StatefulWidget {
   final Function(DateTime date) onPressed;
   final DateTime? initialDate;
   const TextFieldDatePicker(
-      {Key? key,
-      required this.controller,
-      required this.onPressed,
-      this.initialDate})
+      {Key? key, required this.onPressed, this.initialDate})
       : super(key: key);
 
   @override
+  State<TextFieldDatePicker> createState() => _TextFieldDatePickerState();
+}
+
+class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
+  DateTime? date;
+  var text = 'Pick a date';
+  @override
   Widget build(BuildContext context) {
-    if (initialDate != null) {
-      controller.text =
-          '${initialDate!.day}/${initialDate!.month}/${initialDate!.year}';
+    if (widget.initialDate != null) {
+      text =
+          '${widget.initialDate!.day}/${widget.initialDate!.month}/${widget.initialDate!.year}';
     }
 
     return Container(
@@ -26,16 +29,20 @@ class TextFieldDatePicker extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(15.0),
         onTap: () async {
-          var dateRange = await showDatePicker(
-            initialDate: initialDate ?? DateTime.now(),
+          var date = await showDatePicker(
+            initialDate: widget.initialDate ?? DateTime.now(),
             context: context,
             firstDate: DateTime(2013, 1, 1),
             lastDate: DateTime.now(),
           );
-          if (dateRange == null) {
+          if (date == null) {
             return;
           }
-          onPressed(dateRange);
+          setState(() {
+            text = '${date.day}/${date.month}/${date.year}';
+          });
+
+          widget.onPressed(date);
         },
         child: Row(
           children: [
@@ -46,12 +53,7 @@ class TextFieldDatePicker extends StatelessWidget {
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: TextField(
-                enabled: false,
-                controller: controller,
-                decoration:
-                    const InputDecoration.collapsed(hintText: 'dd/mm/yyyy'),
-              ),
+              child: Text(text),
             )),
           ],
         ),

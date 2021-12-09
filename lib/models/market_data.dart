@@ -1,20 +1,25 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/models/date_value.dart';
 import 'package:rising_star_crypto_app/services/coin_gecko_data.dart';
 import 'package:rising_star_crypto_app/services/crypto_data.dart';
 
 class MarketData {
-  final String currency;
-  final String coin;
+  Currency currency;
+  Coin coin;
   final CryptoData database = CoinGeckoData.instance;
 
   late DateTimeRange _dateRange;
   List<DateValueData>? _dailyPrices;
   List<DateValueData>? _dailyTotalVolume;
   List<DateValueData>? _dailyMarketCaps;
+
+  List<DateValueData> longestDownwardTrend = [];
+  DateValueData highestDailyTradingVolume = DateValueData.empty();
+  List<DateValueData> bestBuySellTimes = [];
 
   MarketData({
     required DateTimeRange dateTimeRange,
@@ -35,6 +40,14 @@ class MarketData {
   }
 
   DateTimeRange get dateRange => _dateRange;
+
+  Future<MarketData> updateMarketData() async {
+    longestDownwardTrend = await getLongestDownwardTrendWithinRange();
+    highestDailyTradingVolume = await getHighestDailyTradingVolume();
+    bestBuySellTimes = await getBestBuySellTimes();
+
+    return this;
+  }
 
   Future<List<DateValueData>> _getDailyPrices() async {
     if (_dailyPrices != null) {
@@ -92,7 +105,7 @@ class MarketData {
     return highestEntry;
   }
 
-  Future<List<DateValueData>> calculateBestBuySellTimes() async {
+  Future<List<DateValueData>> getBestBuySellTimes() async {
     // TODO: Calculate in a new thread
     List<DateValueData> pricesLowToHigh = List.from(await _getDailyPrices());
 

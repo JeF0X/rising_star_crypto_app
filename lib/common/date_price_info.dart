@@ -33,7 +33,7 @@ class DateValueInfo extends StatelessWidget {
             Text(
               dateValue == null
                   ? 'No Data'
-                  : '\$${dateValue!.value.toStringAsFixed(2)}',
+                  : dateValue!.value.toStringAsFixed(2),
               style: const TextStyle(fontSize: 24.0),
             ),
           ],

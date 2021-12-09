@@ -3,7 +3,7 @@ import 'package:rising_star_crypto_app/common/date_price_info.dart';
 import 'package:rising_star_crypto_app/models/date_value.dart';
 
 class HighestTradingVolumeInfo extends StatelessWidget {
-  final DateValueData? data;
+  final DateValueData data;
 
   const HighestTradingVolumeInfo({Key? key, required this.data})
       : super(key: key);
@@ -12,7 +12,7 @@ class HighestTradingVolumeInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return DateValueInfo(
       title: 'HIGHEST\nVOLUME',
-      dateValue: data,
+      dateValue: data.value < 0 ? null : data,
     );
   }
 }
