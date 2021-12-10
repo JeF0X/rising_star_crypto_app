@@ -52,11 +52,13 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
                     _buildInfoCards(),
                     !isDataChanged
                         ? const SizedBox()
-                        : ClipRect(
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            clipBehavior: Clip.antiAlias,
                             child: BackdropFilter(
                               filter: ImageFilter.blur(
-                                sigmaX: 4.0,
-                                sigmaY: 4.0,
+                                sigmaX: 10.0,
+                                sigmaY: 10.0,
                               ),
                               child: Container(),
                             ),
@@ -84,9 +86,9 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
                   ),
                 ),
           DraggableScrollableSheet(
-            initialChildSize: 0.11,
-            minChildSize: 0.11,
-            maxChildSize: 0.22,
+            initialChildSize: 0.1,
+            minChildSize: 0.1,
+            maxChildSize: 0.20,
             snap: true,
             builder: (BuildContext context, ScrollController controller) {
               return Container(
@@ -120,14 +122,14 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
-                          'from: ',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white60,
-                          ),
-                        ),
+                        // const Text(
+                        //   'from: ',
+                        //   style: TextStyle(
+                        //     fontSize: 16.0,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.white60,
+                        //   ),
+                        // ),
                         TextFieldDatePicker(
                           initialDate: marketData.dateRange.start.isAfter(
                                   DateTime.fromMicrosecondsSinceEpoch(0))
@@ -142,13 +144,13 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
                             });
                           },
                         ),
-                        const SizedBox(
-                          width: 30.0,
-                        ),
+                        // const SizedBox(
+                        //   width: 30.0,
+                        // ),
                         const Text(
-                          'to: ',
+                          'TO',
                           style: TextStyle(
-                            fontSize: 16.0,
+                            fontSize: 18.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.white60,
                           ),

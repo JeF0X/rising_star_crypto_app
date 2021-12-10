@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/screens/market_data_screen.dart';
 
 void main() {
@@ -14,13 +15,19 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           primarySwatch: Colors.indigo,
           primaryColor: Colors.indigo,
-          colorScheme: const ColorScheme.dark(
-            secondary: Color.fromARGB(255, 60, 70, 122),
+          primaryColorLight: Colors.amber,
+          canvasColor: AppColors.secondary,
+          dialogBackgroundColor: AppColors.primary,
+          colorScheme: ColorScheme.dark(
+            primary: AppColors.highLight,
+            primaryVariant: AppColors.highLight,
+            secondary: AppColors.secondary,
+            surface: AppColors.secondary,
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
               primary: const Color.fromARGB(255, 48, 59, 107),
-              onPrimary: Colors.white60,
+              onPrimary: Colors.white,
               onSurface: Colors.white,
             ),
           ),

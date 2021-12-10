@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class BordelessFlatCard extends StatelessWidget {
@@ -21,6 +23,7 @@ class BordelessFlatCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -42,6 +45,7 @@ class BordelessFlatCard extends StatelessWidget {
           ),
           // Data info
           Stack(
+            fit: StackFit.loose,
             alignment: AlignmentDirectional.center,
             children: [
               Container(
