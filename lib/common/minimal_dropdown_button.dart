@@ -20,9 +20,6 @@ class MinimalDropDownButton<T> extends StatelessWidget {
       isExpanded: false,
       iconSize: 24,
       elevation: 16,
-      style: const TextStyle(
-        color: Colors.black,
-      ),
       isDense: true,
       underline: Container(
         height: 1.0,

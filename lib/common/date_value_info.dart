@@ -4,10 +4,12 @@ import 'package:rising_star_crypto_app/models/date_value.dart';
 class DateValueInfo extends StatelessWidget {
   final String title;
   final DateValueData? dateValue;
+  final String valueSymbol;
   const DateValueInfo({
     Key? key,
     required this.title,
     required this.dateValue,
+    required this.valueSymbol,
   }) : super(key: key);
 
   @override
@@ -17,7 +19,10 @@ class DateValueInfo extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 28.0),
+          style: const TextStyle(
+            fontSize: 22.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -27,14 +32,18 @@ class DateValueInfo extends StatelessWidget {
                   ? 'No Data'
                   : '${dateValue!.date.day}.${dateValue!.date.month}.${dateValue!.date.year}',
               style: const TextStyle(
-                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
               ),
             ),
             Text(
               dateValue == null
                   ? 'No Data'
-                  : dateValue!.value.toStringAsFixed(2),
-              style: const TextStyle(fontSize: 24.0),
+                  : '${dateValue!.value.toStringAsFixed(2)} $valueSymbol',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+              ),
             ),
           ],
         )

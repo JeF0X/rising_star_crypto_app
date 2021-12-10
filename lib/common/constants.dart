@@ -37,20 +37,35 @@ String coinGeckoCurrencies(Currency currency) {
 String getCoinText(Coin coin) {
   switch (coin) {
     case Coin.btc:
-      return 'Bitcoin (BTC)';
+      return 'Bitcoin';
     case Coin.eth:
-      return 'Ehterium (EHT)';
+      return 'Ehterium';
     default:
       return coin.toString();
+  }
+}
+
+String getCurrencySymbol(Currency currency) {
+  switch (currency) {
+    case Currency.usd:
+      return '\$';
+    case Currency.eur:
+      return '€';
+    case Currency.gbp:
+      return '£';
+    default:
+      return currency.toString();
   }
 }
 
 String getCurrencyText(Currency currency) {
   switch (currency) {
     case Currency.usd:
-      return 'US Dollars (USD)';
+      return 'Dollars (USD)';
     case Currency.eur:
       return 'Euros (EUR)';
+    case Currency.gbp:
+      return 'Pounds (GBP)';
     default:
       return currency.toString();
   }

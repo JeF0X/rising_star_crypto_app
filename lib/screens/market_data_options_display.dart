@@ -35,12 +35,15 @@ class _MarketDataOptionsDisplayState extends State<MarketDataOptionsDisplay> {
     }
 
     return Container(
-      decoration: BoxDecoration(border: Border.all()),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 22, 26, 45),
+          borderRadius: BorderRadius.circular(15.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: MinimalDropDownButton<MarketDataOptions>(
               value: dataDropdownValue,
               onChanged: (newValue) async {
@@ -60,15 +63,13 @@ class _MarketDataOptionsDisplayState extends State<MarketDataOptionsDisplay> {
             children: [
               Container(
                 foregroundDecoration: widget.isDataChanged
-                    ? BoxDecoration(color: Colors.black.withAlpha(100))
-                    : null,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(),
-                  ),
-                ),
+                    ? BoxDecoration(
+                        color: Colors.black.withAlpha(100),
+                        borderRadius: BorderRadius.circular(15.0))
+                    : BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
+                decoration: const BoxDecoration(),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: _buildInfoWidget(dataDropdownValue, widget.marketData),
                 ),
               ),
@@ -102,18 +103,18 @@ class _MarketDataOptionsDisplayState extends State<MarketDataOptionsDisplay> {
     switch (option) {
       case MarketDataOptions.bestBuySell:
         return BuyAndSellInfo(
-          buyData: marketData.bestBuySellTimes.isNotEmpty
-              ? marketData.bestBuySellTimes.first
-              : null,
-          sellData: marketData.bestBuySellTimes.isNotEmpty
-              ? marketData.bestBuySellTimes.last
-              : null,
+          currency: marketData.currency,
+          data: marketData.bestBuySellTimes,
         );
       case MarketDataOptions.highestTradingVolume:
         return HighestTradingVolumeInfo(
+            currency: marketData.currency,
             data: marketData.highestDailyTradingVolume);
       case MarketDataOptions.longestDownwardTrend:
-        return LongestTrendInfo(trend: marketData.longestDownwardTrend);
+        return LongestTrendInfo(
+          trend: marketData.longestDownwardTrend,
+          currency: marketData.currency,
+        );
       default:
         const Text('No data');
     }

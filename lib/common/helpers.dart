@@ -52,7 +52,6 @@ class Helpers {
 
     List<DateValueData> trend = [];
 
-// TODO: Make cleaner
     for (var datapoint in valuesWithinRange) {
       if (isDownward &&
           !Helpers.isSameDay(datapoint.date, lastEntry.date) &&

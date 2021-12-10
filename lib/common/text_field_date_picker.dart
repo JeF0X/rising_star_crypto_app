@@ -14,20 +14,24 @@ class TextFieldDatePicker extends StatefulWidget {
 class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
   DateTime? date;
   var text = 'Pick a date';
+  Color color = const Color.fromARGB(255, 22, 26, 45);
   @override
   Widget build(BuildContext context) {
     if (widget.initialDate != null) {
       text =
           '${widget.initialDate!.day}/${widget.initialDate!.month}/${widget.initialDate!.year}';
+      color = const Color.fromARGB(255, 22, 26, 45);
+    } else {
+      color = Colors.red.shade900;
     }
 
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(),
-        borderRadius: BorderRadius.circular(15.0),
+        color: color,
+        borderRadius: BorderRadius.circular(10.0),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(10.0),
         onTap: () async {
           var date = await showDatePicker(
             initialDate: widget.initialDate ?? DateTime.now(),
@@ -47,14 +51,17 @@ class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
         child: Row(
           children: [
             const Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
               child: Icon(Icons.calendar_today_rounded),
             ),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(text),
-            )),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
+              child: Text(
+                text,
+                style: const TextStyle(fontSize: 16.0),
+              ),
+            ),
           ],
         ),
       ),
