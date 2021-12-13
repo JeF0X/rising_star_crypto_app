@@ -7,9 +7,9 @@ class DateValueInfo extends StatelessWidget {
   final String valueSymbol;
   const DateValueInfo({
     Key? key,
-    required this.title,
+    this.title = '',
     required this.dateValue,
-    required this.valueSymbol,
+    this.valueSymbol = '',
   }) : super(key: key);
 
   @override
@@ -39,7 +39,9 @@ class DateValueInfo extends StatelessWidget {
             Text(
               dateValue == null
                   ? 'No Data'
-                  : '${dateValue!.value.toStringAsFixed(2)} $valueSymbol',
+                  : '${dateValue!.value.toStringAsFixed(2)} $valueSymbol'
+                      .trimRight(),
+              textAlign: TextAlign.right,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,

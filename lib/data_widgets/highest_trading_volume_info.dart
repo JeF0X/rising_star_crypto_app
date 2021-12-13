@@ -16,7 +16,6 @@ class HighestTradingVolumeInfo extends StatelessWidget {
     return DateValueInfo(
       title: 'HIGHEST\nVOLUME',
       dateValue: data.value < 0 ? null : data,
-      valueSymbol: getCurrencySymbol(currency),
     );
   }
 }

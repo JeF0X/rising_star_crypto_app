@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rising_star_crypto_app/common/constants.dart';
 
 class TextFieldDatePicker extends StatefulWidget {
   final Function(DateTime date) onPressed;
@@ -13,14 +14,14 @@ class TextFieldDatePicker extends StatefulWidget {
 
 class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
   DateTime? date;
-  var text = 'Pick a date';
-  Color color = const Color.fromARGB(255, 22, 26, 45);
+  var dateText = 'Pick a date';
+  Color color = AppColors.select;
   @override
   Widget build(BuildContext context) {
     if (widget.initialDate != null) {
-      text =
+      dateText =
           '${widget.initialDate!.day}/${widget.initialDate!.month}/${widget.initialDate!.year}';
-      color = const Color.fromARGB(255, 22, 26, 45);
+      color = AppColors.select;
     } else {
       color = Colors.red.shade900;
     }
@@ -43,7 +44,7 @@ class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
             return;
           }
           setState(() {
-            text = '${date.day}/${date.month}/${date.year}';
+            dateText = '${date.day}/${date.month}/${date.year}';
           });
 
           widget.onPressed(date);
@@ -58,7 +59,7 @@ class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
               padding: const EdgeInsets.only(
                   left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
               child: Text(
-                text,
+                dateText,
                 style: const TextStyle(fontSize: 16.0),
               ),
             ),

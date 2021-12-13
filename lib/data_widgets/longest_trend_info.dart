@@ -15,23 +15,42 @@ class LongestTrendInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DateValueInfo(
-          dateValue: trend.isNotEmpty ? trend.first : null,
-          title: 'FROM',
-          valueSymbol: getCurrencySymbol(currency),
-        ),
-        Divider(
-          thickness: 2.0,
-          color: Colors.grey.shade400,
-        ),
-        DateValueInfo(
-          dateValue: trend.isNotEmpty ? trend.last : null,
-          title: 'TO',
-          valueSymbol: getCurrencySymbol(currency),
-        ),
-      ],
-    );
+    bool hasData = trend.length > 1;
+    return !hasData
+        ? const Text(
+            'No downward trends during the time period. Please select a different date range.',
+            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              DateValueInfo(
+                dateValue: trend.isNotEmpty ? trend.first : null,
+                title: 'FROM',
+                valueSymbol: getCurrencySymbol(currency),
+              ),
+              Divider(
+                thickness: 2.0,
+                color: Colors.grey.shade400,
+              ),
+              DateValueInfo(
+                dateValue: trend.isNotEmpty ? trend.last : null,
+                title: 'TO',
+                valueSymbol: getCurrencySymbol(currency),
+              ),
+              const Divider(
+                thickness: 2.0,
+                color: Colors.white38,
+              ),
+              Text(
+                '${trend.length - 1} days',
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
+              ),
+            ],
+          );
   }
 }

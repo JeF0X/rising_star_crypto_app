@@ -13,7 +13,7 @@ class CoinGeckoService {
 
   final HttpService httpService = HttpService();
 
-// CODES
+// COINS
   // market_chart/range
   Future<Map<String, dynamic>> getMarketChartRange({
     required String coin,

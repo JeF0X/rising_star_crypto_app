@@ -13,8 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         theme: ThemeData(
           brightness: Brightness.dark,
-          primarySwatch: Colors.indigo,
-          primaryColor: Colors.indigo,
           primaryColorLight: Colors.amber,
           canvasColor: AppColors.secondary,
           dialogBackgroundColor: AppColors.primary,

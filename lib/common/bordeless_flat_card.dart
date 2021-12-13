@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:rising_star_crypto_app/common/constants.dart';
 
 class BordelessFlatCard extends StatelessWidget {
   final String title;
@@ -19,8 +18,7 @@ class BordelessFlatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 22, 26, 45),
-          borderRadius: BorderRadius.circular(15.0)),
+          color: AppColors.select, borderRadius: BorderRadius.circular(15.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -10,7 +11,7 @@ class HttpService {
     log('Request URL: $url');
     log('Response status: ${response.statusCode}');
     if (response.statusCode == 200 && response.body.isNotEmpty) {
-      var jsonBody = json.decode(response.body);
+      var jsonBody = await compute(json.decode, response.body);
       return jsonBody;
     } else {
       throw HttpException('Problem loading data', uri: Uri.parse(url));

@@ -41,10 +41,10 @@ class Helpers {
     return dailyValuesWithinRange;
   }
 
-  static List<DateValueData> getLongestTrend({
+  static Future<List<DateValueData>> getLongestTrend({
     required List<DateValueData> valuesWithinRange,
     bool isDownward = true,
-  }) {
+  }) async {
     List<DateValueData> longestTrend = [];
 
     DateValueData lastEntry = DateValueData(
@@ -74,6 +74,9 @@ class Helpers {
         trend.clear();
       }
       lastEntry = datapoint;
+    }
+    if (trend.length > longestTrend.length) {
+      longestTrend = trend;
     }
     return longestTrend;
   }

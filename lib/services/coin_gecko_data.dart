@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/models/date_value.dart';
@@ -29,7 +30,8 @@ class CoinGeckoData implements CryptoData {
         await _getMarketChartData(coinString, currencyString, from, to);
     List<dynamic> totalVolumes = jsonData['total_volumes'];
 
-    var allTotalVolumesWithinRange = _parseMarketChartData(totalVolumes);
+    var allTotalVolumesWithinRange =
+        await compute(_parseMarketChartData, totalVolumes);
     var dailyTotalVolumesWithinRange = Helpers.getDailyValuesWithinRange(
         allValuesWithinRange: allTotalVolumesWithinRange, from: from, to: to);
     return dailyTotalVolumesWithinRange;
@@ -47,7 +49,8 @@ class CoinGeckoData implements CryptoData {
     var jsonData =
         await _getMarketChartData(coinString, currencyString, from, to);
     List<dynamic> marketCaps = jsonData['market_caps'];
-    var allMarketCapsWihtinRange = _parseMarketChartData(marketCaps);
+    var allMarketCapsWihtinRange =
+        await compute(_parseMarketChartData, marketCaps);
     var dailyMarketCapsWithinRange = Helpers.getDailyValuesWithinRange(
         allValuesWithinRange: allMarketCapsWihtinRange, from: from, to: to);
     return dailyMarketCapsWithinRange;
@@ -65,7 +68,7 @@ class CoinGeckoData implements CryptoData {
     var jsonData =
         await _getMarketChartData(coinString, currencyString, from, to);
     List<dynamic> pricesData = jsonData['prices'];
-    var allPricesWithinRange = _parseMarketChartData(pricesData);
+    var allPricesWithinRange = await compute(_parseMarketChartData, pricesData);
     var dailyPricesWithinRange = Helpers.getDailyValuesWithinRange(
         allValuesWithinRange: allPricesWithinRange, from: from, to: to);
     return dailyPricesWithinRange;
