@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rising_star_crypto_app/models/date_value.dart';
+import 'package:rising_star_crypto_app/models/date_value_data.dart';
 
 class DateValueInfo extends StatelessWidget {
   final String title;

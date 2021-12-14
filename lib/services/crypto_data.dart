@@ -1,5 +1,5 @@
 import 'package:rising_star_crypto_app/common/constants.dart';
-import 'package:rising_star_crypto_app/models/date_value.dart';
+import 'package:rising_star_crypto_app/models/date_value_data.dart';
 
 abstract class CryptoData {
   Future<List<DateValueData>> getDailyPricesWithinRange({

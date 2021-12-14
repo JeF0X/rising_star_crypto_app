@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/common/date_value_info.dart';
-import 'package:rising_star_crypto_app/models/date_value.dart';
+import 'package:rising_star_crypto_app/models/date_value_data.dart';
 
 class BuyAndSellInfo extends StatelessWidget {
   final List<DateValueData> data;

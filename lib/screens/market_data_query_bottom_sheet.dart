@@ -62,10 +62,8 @@ class MarketDataQueryBottomSheet extends StatelessWidget {
                           : date.add(
                               const Duration(days: 1),
                             );
-                      marketData.dateRange = DateTimeRange(
-                        start: date,
-                        end: endDate,
-                      );
+                      marketData.dateRange =
+                          DateTimeRange(start: date, end: endDate);
                       onDataChanged();
                     },
                   ),

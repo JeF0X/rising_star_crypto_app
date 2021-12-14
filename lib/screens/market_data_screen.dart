@@ -16,8 +16,8 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
   MarketData marketData = MarketData(
     dateRange: DateTimeRange(
         start: DateTime.fromMicrosecondsSinceEpoch(0), end: DateTime.now()),
-    coin: Coin.btc,
-    currency: Currency.usd,
+    coin: Coin.bitcoin,
+    currency: Currency.usDollar,
   );
 
   bool isDataChanged = true;

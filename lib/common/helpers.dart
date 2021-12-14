@@ -1,10 +1,12 @@
-import 'package:rising_star_crypto_app/models/date_value.dart';
+import 'package:rising_star_crypto_app/models/date_value_data.dart';
 
 class Helpers {
   static bool isSameDay(DateTime dayA, DateTime dayB) {
-    if (dayA.day == dayB.day &&
-        dayA.month == dayB.month &&
-        dayA.year == dayB.year) {
+    var dayAUTC = dayA.toUtc();
+    var dayBUTC = dayB.toUtc();
+    if (dayAUTC.day == dayBUTC.day &&
+        dayAUTC.month == dayBUTC.month &&
+        dayAUTC.year == dayBUTC.year) {
       return true;
     }
     return false;

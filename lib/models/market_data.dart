@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/common/helpers.dart';
-import 'package:rising_star_crypto_app/models/date_value.dart';
+import 'package:rising_star_crypto_app/models/date_value_data.dart';
 import 'package:rising_star_crypto_app/services/coin_gecko_data.dart';
 import 'package:rising_star_crypto_app/services/crypto_data.dart';
 

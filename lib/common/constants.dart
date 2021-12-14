@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 enum Currency {
-  eur,
-  usd,
-  gbp,
+  euro,
+  usDollar,
+  britishPound,
 }
 
 enum Coin {
-  btc,
-  eth,
-  bnb,
+  bitcoin,
+  etherium,
+  binanceCoin,
 }
 
 enum MarketDataOptions {
@@ -27,27 +27,27 @@ class AppColors {
 
 String coinGeckoCoins(Coin coin) {
   Map<Coin, String> coinGeckoCoins = {
-    Coin.btc: 'bitcoin',
-    Coin.eth: 'ethereum',
-    Coin.bnb: 'binance-coin',
+    Coin.bitcoin: 'bitcoin',
+    Coin.etherium: 'ethereum',
+    Coin.binanceCoin: 'binance-coin',
   };
   return coinGeckoCoins[coin] ?? 'bitcoin';
 }
 
 String coinGeckoCurrencies(Currency currency) {
   Map<Currency, String> coinGeckoCoins = {
-    Currency.usd: 'usd',
-    Currency.eur: 'eur',
-    Currency.gbp: 'gbp',
+    Currency.usDollar: 'usd',
+    Currency.euro: 'eur',
+    Currency.britishPound: 'gbp',
   };
   return coinGeckoCoins[currency] ?? 'usd';
 }
 
 String getCoinText(Coin coin) {
   switch (coin) {
-    case Coin.btc:
+    case Coin.bitcoin:
       return 'Bitcoin';
-    case Coin.eth:
+    case Coin.etherium:
       return 'Ehterium';
     default:
       return coin.toString();
@@ -56,11 +56,11 @@ String getCoinText(Coin coin) {
 
 String getCurrencySymbol(Currency currency) {
   switch (currency) {
-    case Currency.usd:
+    case Currency.usDollar:
       return '\$';
-    case Currency.eur:
+    case Currency.euro:
       return '€';
-    case Currency.gbp:
+    case Currency.britishPound:
       return '£';
     default:
       return currency.toString();
@@ -69,11 +69,11 @@ String getCurrencySymbol(Currency currency) {
 
 String getCurrencyText(Currency currency) {
   switch (currency) {
-    case Currency.usd:
+    case Currency.usDollar:
       return 'Dollars (USD)';
-    case Currency.eur:
+    case Currency.euro:
       return 'Euros (EUR)';
-    case Currency.gbp:
+    case Currency.britishPound:
       return 'Pounds (GBP)';
     default:
       return currency.toString();
