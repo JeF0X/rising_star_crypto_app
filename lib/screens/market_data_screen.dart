@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
@@ -58,6 +60,10 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      Text(
+                        errorText,
+                        style: TextStyle(color: Colors.red.shade900),
+                      ),
                       isLoading
                           ? const CircularProgressIndicator()
                           : ElevatedButton(
@@ -89,10 +95,30 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
 
   _onRefreshButtonPressed() async {
     setState(() {
+      errorText = '';
       isLoading = true;
     });
-    await marketData.updateMarketData();
+    try {
+      await marketData.updateMarketData();
+    } on HttpException catch (e) {
+      setState(() {
+        isLoading = false;
+        errorText = e.message;
+      });
+      log(e.message);
+      return;
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorText = 'Error parsing data';
+      });
+
+      log(e.toString());
+      return;
+    }
+
     setState(() {
+      errorText = '';
       marketData;
       isLoading = false;
       isDataChanged = false;
