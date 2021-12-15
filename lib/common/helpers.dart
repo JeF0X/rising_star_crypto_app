@@ -35,8 +35,9 @@ class Helpers {
 
     dailyValuesWithinRange.removeWhere((item) => (item.date.isBefore(from)));
     dailyValuesWithinRange.removeWhere((item) {
-      var firstDataPointOfLastDay = dailyValuesWithinRange
-          .firstWhere((element) => Helpers.isSameDay(element.date, to));
+      DateValueData firstDataPointOfLastDay = dailyValuesWithinRange.firstWhere(
+          (element) => Helpers.isSameDay(element.date, to),
+          orElse: () => dailyValuesWithinRange.last);
       return item.date.isAfter(firstDataPointOfLastDay.date);
     });
 

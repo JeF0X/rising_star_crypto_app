@@ -11,11 +11,9 @@ class CoinGeckoData implements CryptoData {
   String? lastCurrency;
   DateTime? lastStartTime;
   DateTime? lastEndTime;
+  final CoinGeckoService service;
 
-  CoinGeckoData._();
-  static final instance = CoinGeckoData._();
-
-  final CoinGeckoService service = CoinGeckoService.instance;
+  CoinGeckoData(this.service);
 
   @override
   Future<List<DateValueData>> getDailyTotalVolumesWithinRange({

@@ -5,12 +5,13 @@ import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/models/date_value_data.dart';
 import 'package:rising_star_crypto_app/services/coin_gecko_data.dart';
+import 'package:rising_star_crypto_app/services/coin_gecko_service.dart';
 import 'package:rising_star_crypto_app/services/crypto_data.dart';
 
 class MarketData {
   Currency currency;
   Coin coin;
-  final CryptoData database = CoinGeckoData.instance;
+  final CryptoData database = CoinGeckoData(CoinGeckoService.instance);
 
   late DateTimeRange dateRange;
 

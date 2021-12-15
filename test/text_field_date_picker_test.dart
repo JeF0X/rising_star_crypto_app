@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 import 'package:rising_star_crypto_app/common/text_field_date_picker.dart';
 
-class MockDatePicker extends Mock {}
-
-@GenerateMocks([DatePickerDialog])
 void main() {
   setUp(() {});
-
-  Future<void> pumpTextFieldDatePicker(WidgetTester tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: TextFieldDatePicker(
-            onPressed: (date) {},
-          ),
-        ),
-      ),
-    );
-  }
-
   testWidgets('onPressed callback', (WidgetTester tester) async {
     var pressed = false;
+    var initialDate = DateTime(2020, 1, 1);
+    var firstDate = DateTime(2020, 1, 1);
+    var lastDate = DateTime(2020, 2, 1);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: TextFieldDatePicker(
-          onPressed: (DateTime date) {
-            pressed = true;
-          },
-        ),
-      ),
+      Builder(builder: (context) {
+        return MaterialApp(
+          home: Scaffold(
+            body: TextFieldDatePicker(
+              initialDate: initialDate,
+              onPressed: (DateTime date) {
+                pressed = true;
+              },
+            ),
+          ),
+        );
+      }),
     );
+
     final button = find.byType(InkWell);
     expect(button, findsOneWidget);
+    // Wait for datepicker
     await tester.tap(button);
-    expect(pressed, pressed);
+    await tester.pumpAndSettle();
+    final datePickerButton = find.byType(TextButton);
+    expect(datePickerButton, findsWidgets);
+    await tester.tap(datePickerButton.last);
+    await tester.pumpAndSettle();
+    expect(datePickerButton, findsNothing);
+    expect(pressed, true);
   });
 }

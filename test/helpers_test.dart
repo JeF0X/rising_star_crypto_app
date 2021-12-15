@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rising_star_crypto_app/common/helpers.dart';
-import 'package:rising_star_crypto_app/models/date_value_data.dart';
 
 void main() {
   group('isSameDay', () {
