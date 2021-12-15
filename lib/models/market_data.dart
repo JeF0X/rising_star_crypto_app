@@ -25,6 +25,7 @@ class MarketData {
     required this.currency,
   });
 
+  /// Update market data for this [MarketData] object
   Future<void> updateMarketData() async {
     longestDownwardTrend = await _getLongestDownwardTrendWithinRange();
     highestDailyTradingVolume = await _getHighestDailyTradingVolume();
@@ -39,7 +40,7 @@ class MarketData {
       to: dateRange.end,
     );
     return await Helpers.getLongestTrend(
-        valuesWithinRange: pricesWithinRange, isDownward: true);
+        values: pricesWithinRange, isDownward: true);
   }
 
   Future<DateValueData> _getHighestDailyTradingVolume() async {

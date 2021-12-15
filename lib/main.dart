@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/screens/market_data_screen.dart';
+
+import 'common/app_colors.dart';
 
 void main() {
   runApp(const MyApp());

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
+import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/services/coin_gecko_service.dart';
 import 'package:rising_star_crypto_app/services/http_service.dart';
 
@@ -20,8 +21,8 @@ void main() {
         .thenAnswer((_) => Future.value(coinGeckoTestDataLong));
 
     var data = await service.getMarketChartRange(
-        coin: coinGeckoCoins(Coin.bitcoin),
-        vsCurrency: coinGeckoCurrencies(Currency.euro),
+        coin: Helpers.getCoinGeckoCoinString(Coin.bitcoin),
+        vsCurrency: Helpers.getCoinGeckoCurrencyString(Currency.euro),
         unixTimeFrom: startTime,
         unixTimeTo: endTime);
 

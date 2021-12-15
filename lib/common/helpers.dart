@@ -1,51 +1,21 @@
 import 'package:rising_star_crypto_app/models/date_value_data.dart';
 
+import 'constants.dart';
+
 class Helpers {
+  /// Check if [dayA] and [dayB] are on the same day time
   static bool isSameDay(DateTime dayA, DateTime dayB) {
-    var dayAUTC = dayA.toUtc();
-    var dayBUTC = dayB.toUtc();
-    if (dayAUTC.day == dayBUTC.day &&
-        dayAUTC.month == dayBUTC.month &&
-        dayAUTC.year == dayBUTC.year) {
+    if (dayA.day == dayB.day &&
+        dayA.month == dayB.month &&
+        dayA.year == dayB.year) {
       return true;
     }
     return false;
   }
 
-  static List<DateValueData> getDailyValuesWithinRange({
-    required List<DateValueData> allValuesWithinRange,
-    required DateTime from,
-    required DateTime to,
-  }) {
-    List<DateValueData> dailyValuesWithinRange =
-        List.from(allValuesWithinRange);
-
-    List<DateValueData> entriesToBeRemoved = [];
-    DateValueData lastItem = DateValueData(
-        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true), -1.0);
-    for (var item in dailyValuesWithinRange) {
-      if (Helpers.isSameDay(item.date, lastItem.date)) {
-        entriesToBeRemoved.add(item);
-        continue;
-      }
-      lastItem = item;
-    }
-    dailyValuesWithinRange
-        .removeWhere((item) => entriesToBeRemoved.contains(item));
-
-    dailyValuesWithinRange.removeWhere((item) => (item.date.isBefore(from)));
-    dailyValuesWithinRange.removeWhere((item) {
-      DateValueData firstDataPointOfLastDay = dailyValuesWithinRange.firstWhere(
-          (element) => Helpers.isSameDay(element.date, to),
-          orElse: () => dailyValuesWithinRange.last);
-      return item.date.isAfter(firstDataPointOfLastDay.date);
-    });
-
-    return dailyValuesWithinRange;
-  }
-
+  /// Get longest trend from [values]. Set [isDownward] to false for upwardTrend.
   static Future<List<DateValueData>> getLongestTrend({
-    required List<DateValueData> valuesWithinRange,
+    required List<DateValueData> values,
     bool isDownward = true,
   }) async {
     List<DateValueData> longestTrend = [];
@@ -55,7 +25,7 @@ class Helpers {
 
     List<DateValueData> trend = [];
 
-    for (var datapoint in valuesWithinRange) {
+    for (var datapoint in values) {
       if (isDownward &&
           !Helpers.isSameDay(datapoint.date, lastEntry.date) &&
           datapoint.value < lastEntry.value) {
@@ -82,5 +52,65 @@ class Helpers {
       longestTrend = trend;
     }
     return longestTrend;
+  }
+
+  /// Get string for [coin] matching CoinGecko API's coin [id]
+  static String getCoinGeckoCoinString(Coin coin) {
+    Map<Coin, String> coinGeckoCoins = {
+      Coin.bitcoin: 'bitcoin',
+      Coin.etherium: 'ethereum',
+      Coin.binanceCoin: 'binance-coin',
+    };
+    return coinGeckoCoins[coin] ?? 'bitcoin';
+  }
+
+  /// Get string for [currency] matching CoinGecko API's [vs_currency]
+  static String getCoinGeckoCurrencyString(Currency currency) {
+    Map<Currency, String> coinGeckoCoins = {
+      Currency.usDollar: 'usd',
+      Currency.euro: 'eur',
+      Currency.britishPound: 'gbp',
+    };
+    return coinGeckoCoins[currency] ?? 'usd';
+  }
+
+  /// Get coin name matching [coin]
+  static String getCoinText(Coin coin) {
+    switch (coin) {
+      case Coin.bitcoin:
+        return 'Bitcoin';
+      case Coin.etherium:
+        return 'Ehterium';
+      default:
+        return coin.toString();
+    }
+  }
+
+  /// Get currency symbol matching [currency]
+  static String getCurrencySymbol(Currency currency) {
+    switch (currency) {
+      case Currency.usDollar:
+        return '\$';
+      case Currency.euro:
+        return '€';
+      case Currency.britishPound:
+        return '£';
+      default:
+        return currency.toString();
+    }
+  }
+
+  /// Get currency name matching [currency]
+  static String getCurrencyText(Currency currency) {
+    switch (currency) {
+      case Currency.usDollar:
+        return 'Dollars (USD)';
+      case Currency.euro:
+        return 'Euros (EUR)';
+      case Currency.britishPound:
+        return 'Pounds (GBP)';
+      default:
+        return currency.toString();
+    }
   }
 }

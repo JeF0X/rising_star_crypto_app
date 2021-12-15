@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/common/date_value_info.dart';
+import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/models/date_value_data.dart';
 
 class LongestTrendInfo extends StatelessWidget {
@@ -27,7 +28,7 @@ class LongestTrendInfo extends StatelessWidget {
               DateValueInfo(
                 dateValue: trend.isNotEmpty ? trend.first : null,
                 title: 'FROM',
-                valueSymbol: getCurrencySymbol(currency),
+                valueSymbol: Helpers.getCurrencySymbol(currency),
               ),
               Divider(
                 thickness: 2.0,
@@ -36,7 +37,7 @@ class LongestTrendInfo extends StatelessWidget {
               DateValueInfo(
                 dateValue: trend.isNotEmpty ? trend.last : null,
                 title: 'TO',
-                valueSymbol: getCurrencySymbol(currency),
+                valueSymbol: Helpers.getCurrencySymbol(currency),
               ),
               const Divider(
                 thickness: 2.0,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/common/date_value_info.dart';
+import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/models/date_value_data.dart';
 
 class BuyAndSellInfo extends StatelessWidget {
@@ -32,7 +33,7 @@ class BuyAndSellInfo extends StatelessWidget {
               DateValueInfo(
                 dateValue: hasNoData ? null : data.first,
                 title: 'BUY',
-                valueSymbol: getCurrencySymbol(currency),
+                valueSymbol: Helpers.getCurrencySymbol(currency),
               ),
               Divider(
                 thickness: 2.0,
@@ -41,7 +42,7 @@ class BuyAndSellInfo extends StatelessWidget {
               DateValueInfo(
                 dateValue: hasNoData ? null : data.last,
                 title: 'SELL',
-                valueSymbol: getCurrencySymbol(currency),
+                valueSymbol: Helpers.getCurrencySymbol(currency),
               ),
               const Divider(
                 thickness: 2.0,

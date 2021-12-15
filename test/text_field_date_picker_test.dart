@@ -7,8 +7,6 @@ void main() {
   testWidgets('onPressed callback', (WidgetTester tester) async {
     var pressed = false;
     var initialDate = DateTime(2020, 1, 1);
-    var firstDate = DateTime(2020, 1, 1);
-    var lastDate = DateTime(2020, 2, 1);
 
     await tester.pumpWidget(
       Builder(builder: (context) {

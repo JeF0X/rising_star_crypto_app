@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rising_star_crypto_app/common/constants.dart';
+
+import 'app_colors.dart';
 
 class BordelessFlatCard extends StatelessWidget {
   final String title;

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rising_star_crypto_app/common/app_colors.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
+import 'package:rising_star_crypto_app/common/helpers.dart';
 import 'package:rising_star_crypto_app/common/minimal_dropdown_button.dart';
 import 'package:rising_star_crypto_app/common/text_field_date_picker.dart';
 import 'package:rising_star_crypto_app/models/market_data.dart';
@@ -12,8 +14,33 @@ class MarketDataQueryBottomSheet extends StatelessWidget {
       {Key? key, required this.marketData, required this.onDataChanged})
       : super(key: key);
 
+  void _onEndDatePressed(DateTime date) {
+    var startDate = marketData.dateRange.start.isBefore(date)
+        ? marketData.dateRange.start
+        : date.subtract(
+            const Duration(days: 1),
+          );
+    marketData.dateRange = DateTimeRange(start: startDate, end: date);
+    onDataChanged();
+  }
+
+  void _onStartDatePressed(DateTime date) {
+    var endDate = marketData.dateRange.end.isAfter(date)
+        ? marketData.dateRange.end
+        : date.add(
+            const Duration(days: 1),
+          );
+    marketData.dateRange = DateTimeRange(start: date, end: endDate);
+    onDataChanged();
+  }
+
   @override
   Widget build(BuildContext context) {
+    DateTime? initialStartDate = marketData.dateRange.start
+            .isAfter(DateTime.fromMicrosecondsSinceEpoch(0))
+        ? marketData.dateRange.start
+        : null;
+
     return DraggableScrollableSheet(
       initialChildSize: kIsWeb ? 0.22 : 0.1,
       minChildSize: kIsWeb ? 0.22 : 0.1,
@@ -24,8 +51,9 @@ class MarketDataQueryBottomSheet extends StatelessWidget {
           decoration: BoxDecoration(
               color: AppColors.secondary,
               borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(25.0),
-                  topRight: Radius.circular(25.0)),
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
+              ),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.primary,
@@ -52,20 +80,8 @@ class MarketDataQueryBottomSheet extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFieldDatePicker(
-                    initialDate: marketData.dateRange.start
-                            .isAfter(DateTime.fromMicrosecondsSinceEpoch(0))
-                        ? marketData.dateRange.start
-                        : null,
-                    onPressed: (date) async {
-                      var endDate = marketData.dateRange.end.isAfter(date)
-                          ? marketData.dateRange.end
-                          : date.add(
-                              const Duration(days: 1),
-                            );
-                      marketData.dateRange =
-                          DateTimeRange(start: date, end: endDate);
-                      onDataChanged();
-                    },
+                    initialDate: initialStartDate,
+                    onPressed: (date) => _onStartDatePressed(date),
                   ),
                   const Text(
                     'TO',
@@ -77,16 +93,7 @@ class MarketDataQueryBottomSheet extends StatelessWidget {
                   ),
                   TextFieldDatePicker(
                     initialDate: marketData.dateRange.end,
-                    onPressed: (date) async {
-                      var startDate = marketData.dateRange.start.isBefore(date)
-                          ? marketData.dateRange.start
-                          : date.subtract(
-                              const Duration(days: 1),
-                            );
-                      marketData.dateRange =
-                          DateTimeRange(start: startDate, end: date);
-                      onDataChanged();
-                    },
+                    onPressed: (date) => _onEndDatePressed(date),
                   ),
                 ],
               ),
@@ -104,7 +111,8 @@ class MarketDataQueryBottomSheet extends StatelessWidget {
                       MinimalDropDownButton<Currency>(
                         value: marketData.currency,
                         values: Currency.values,
-                        menuItemChild: (value) => getCurrencyText(value),
+                        menuItemChild: (value) =>
+                            Helpers.getCurrencyText(value),
                         onChanged: (value) {
                           marketData.currency = value;
                           onDataChanged();
@@ -122,7 +130,7 @@ class MarketDataQueryBottomSheet extends StatelessWidget {
                       MinimalDropDownButton<Coin>(
                         value: marketData.coin,
                         values: Coin.values,
-                        menuItemChild: (value) => getCoinText(value),
+                        menuItemChild: (value) => Helpers.getCoinText(value),
                         onChanged: (value) {
                           marketData.coin = value;
                           onDataChanged();

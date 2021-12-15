@@ -27,6 +27,46 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
   bool isStartDateAtEpoch = false;
   String errorText = 'Pick a start date';
 
+  _onDataChanged() {
+    setState(() {
+      errorText = '';
+      isStartDateAtEpoch = true;
+      isDataChanged = true;
+    });
+  }
+
+  _onRefreshButtonPressed() async {
+    setState(() {
+      errorText = '';
+      isLoading = true;
+    });
+    try {
+      await marketData.updateMarketData();
+    } on HttpException catch (e) {
+      setState(() {
+        isLoading = false;
+        errorText = e.message;
+      });
+      log(e.message);
+      return;
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorText = 'Error parsing data';
+      });
+
+      log(e.toString());
+      return;
+    }
+
+    setState(() {
+      errorText = '';
+      marketData;
+      isLoading = false;
+      isDataChanged = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     isStartDateAtEpoch = !marketData.dateRange.start
@@ -83,45 +123,5 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
         ],
       ),
     );
-  }
-
-  _onDataChanged() {
-    setState(() {
-      errorText = '';
-      isStartDateAtEpoch = true;
-      isDataChanged = true;
-    });
-  }
-
-  _onRefreshButtonPressed() async {
-    setState(() {
-      errorText = '';
-      isLoading = true;
-    });
-    try {
-      await marketData.updateMarketData();
-    } on HttpException catch (e) {
-      setState(() {
-        isLoading = false;
-        errorText = e.message;
-      });
-      log(e.message);
-      return;
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        errorText = 'Error parsing data';
-      });
-
-      log(e.toString());
-      return;
-    }
-
-    setState(() {
-      errorText = '';
-      marketData;
-      isLoading = false;
-      isDataChanged = false;
-    });
   }
 }
