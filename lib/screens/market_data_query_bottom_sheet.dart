@@ -37,113 +37,111 @@ class MarketDataQueryBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime? initialStartDate = marketData.dateRange.start
-            .isAfter(DateTime.fromMicrosecondsSinceEpoch(0))
+            .isAfter(DateTime.fromMicrosecondsSinceEpoch(0).toUtc())
         ? marketData.dateRange.start
         : null;
 
-    return DraggableScrollableSheet(
-      initialChildSize: kIsWeb ? 0.22 : 0.1,
-      minChildSize: kIsWeb ? 0.22 : 0.1,
-      maxChildSize: kIsWeb ? 0.22 : 0.22,
-      snap: true,
-      builder: (BuildContext context, ScrollController controller) {
-        return Container(
-          decoration: BoxDecoration(
-              color: AppColors.secondary,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(25.0),
-                topRight: Radius.circular(25.0),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary,
-                  spreadRadius: 20,
-                  blurRadius: 20,
-                  offset: const Offset(0, 3),
-                ),
-              ]),
-          child: ListView(
-            physics: const ClampingScrollPhysics(),
-            shrinkWrap: true,
-            padding:
-                const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-            controller: controller,
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+          color: AppColors.secondary,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25.0),
+            topRight: Radius.circular(25.0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary,
+              spreadRadius: 10,
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ]),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment:
+            kIsWeb ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: kIsWeb
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Divider(
-                color: Colors.white60,
-                thickness: 2.0,
-                indent: 150.0,
-                endIndent: 150.0,
+              TextFieldDatePicker(
+                initialDate: initialStartDate,
+                lastDate: DateTime.now().subtract(const Duration(days: 1)),
+                onPressed: (date) => _onStartDatePressed(date),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.min,
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  'TO',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white60,
+                  ),
+                ),
+              ),
+              TextFieldDatePicker(
+                initialDate: marketData.dateRange.end,
+                lastDate: DateTime.now(),
+                onPressed: (date) => _onEndDatePressed(date),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16.0),
+          Row(
+            mainAxisAlignment: kIsWeb
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextFieldDatePicker(
-                    initialDate: initialStartDate,
-                    onPressed: (date) => _onStartDatePressed(date),
-                  ),
                   const Text(
-                    'TO',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white60,
-                    ),
+                    'Currency',
+                    style: TextStyle(color: Colors.white60),
                   ),
-                  TextFieldDatePicker(
-                    initialDate: marketData.dateRange.end,
-                    onPressed: (date) => _onEndDatePressed(date),
+                  MinimalDropDownButton<Currency>(
+                    value: marketData.currency,
+                    values: Currency.values,
+                    menuItemChild: (value) => Helpers.getCurrencyText(value),
+                    onChanged: (value) {
+                      marketData.currency = value;
+                      onDataChanged();
+                    },
                   ),
                 ],
               ),
-              const SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              const SizedBox(
+                width: 60,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Currency',
-                        style: TextStyle(color: Colors.white60),
-                      ),
-                      MinimalDropDownButton<Currency>(
-                        value: marketData.currency,
-                        values: Currency.values,
-                        menuItemChild: (value) =>
-                            Helpers.getCurrencyText(value),
-                        onChanged: (value) {
-                          marketData.currency = value;
-                          onDataChanged();
-                        },
-                      ),
-                    ],
+                  const Text(
+                    'Coin',
+                    style: TextStyle(color: Colors.white60),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Coin',
-                        style: TextStyle(color: Colors.white60),
-                      ),
-                      MinimalDropDownButton<Coin>(
-                        value: marketData.coin,
-                        values: Coin.values,
-                        menuItemChild: (value) => Helpers.getCoinText(value),
-                        onChanged: (value) {
-                          marketData.coin = value;
-                          onDataChanged();
-                        },
-                      ),
-                    ],
+                  MinimalDropDownButton<Coin>(
+                    value: marketData.coin,
+                    values: Coin.values,
+                    menuItemChild: (value) => Helpers.getCoinText(value),
+                    onChanged: (value) {
+                      marketData.coin = value;
+                      onDataChanged();
+                    },
                   ),
                 ],
               ),
             ],
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

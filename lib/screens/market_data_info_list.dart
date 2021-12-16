@@ -47,7 +47,7 @@ class MarketDataInfoList extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 60.0,
+          height: 120.0,
         ),
       ],
     );

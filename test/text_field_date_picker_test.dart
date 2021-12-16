@@ -12,11 +12,15 @@ void main() {
       Builder(builder: (context) {
         return MaterialApp(
           home: Scaffold(
-            body: TextFieldDatePicker(
-              initialDate: initialDate,
-              onPressed: (DateTime date) {
-                pressed = true;
-              },
+            body: SizedBox(
+              width: 500.0,
+              child: TextFieldDatePicker(
+                initialDate: initialDate,
+                lastDate: DateTime.now(),
+                onPressed: (DateTime date) {
+                  pressed = true;
+                },
+              ),
             ),
           ),
         );

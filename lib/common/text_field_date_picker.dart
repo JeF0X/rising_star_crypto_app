@@ -5,8 +5,12 @@ import 'app_colors.dart';
 class TextFieldDatePicker extends StatefulWidget {
   final Function(DateTime date) onPressed;
   final DateTime? initialDate;
+  final DateTime lastDate;
   const TextFieldDatePicker(
-      {Key? key, required this.onPressed, this.initialDate})
+      {Key? key,
+      required this.onPressed,
+      this.initialDate,
+      required this.lastDate})
       : super(key: key);
 
   @override
@@ -28,43 +32,50 @@ class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
     }
 
     return Container(
+      constraints: const BoxConstraints(minWidth: 110.0, maxWidth: 150.0),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10.0),
-        onTap: () async {
-          var date = await showDatePicker(
-            initialDate: widget.initialDate ?? DateTime.now(),
-            context: context,
-            firstDate: DateTime(2013, 1, 1),
-            lastDate: DateTime.now(),
-          );
-          if (date == null) {
-            return;
-          }
-          setState(() {
-            dateText = '${date.day}/${date.month}/${date.year}';
-          });
+      child: Expanded(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10.0),
+          onTap: () async {
+            var date = await showDatePicker(
+              initialDate: widget.initialDate ??
+                  DateTime.now().subtract(const Duration(days: 1)),
+              context: context,
+              firstDate: DateTime(2013, 1, 1),
+              lastDate: widget.lastDate,
+            );
+            if (date == null) {
+              return;
+            } else {
+              var utcDate = DateTime.utc(date.year, date.month, date.day);
+              setState(() {
+                dateText = '${utcDate.day}/${utcDate.month}/${utcDate.year}';
+              });
 
-          widget.onPressed(date);
-        },
-        child: Row(
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
-              child: Icon(Icons.calendar_today_rounded),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
-              child: Text(
-                dateText,
-                style: const TextStyle(fontSize: 16.0),
+              widget.onPressed(utcDate);
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                child: Icon(Icons.calendar_today_rounded),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
+                child: Text(
+                  dateText,
+                  style: const TextStyle(fontSize: 14.0),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

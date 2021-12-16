@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/models/market_data.dart';
@@ -17,9 +18,10 @@ class MarketDataScreen extends StatefulWidget {
 class _MarketDataScreenState extends State<MarketDataScreen> {
   MarketData marketData = MarketData(
     dateRange: DateTimeRange(
-        start: DateTime.fromMicrosecondsSinceEpoch(0), end: DateTime.now()),
+        start: DateTime.fromMicrosecondsSinceEpoch(0).toUtc(),
+        end: DateTime.now().toUtc()),
     coin: Coin.bitcoin,
-    currency: Currency.usDollar,
+    currency: Currency.euro,
   );
 
   bool isDataChanged = true;
@@ -70,15 +72,19 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
   @override
   Widget build(BuildContext context) {
     isStartDateAtEpoch = !marketData.dateRange.start
-        .isAfter(DateTime.fromMicrosecondsSinceEpoch(0));
+        .isAfter(DateTime.fromMicrosecondsSinceEpoch(0).toUtc());
     return Expanded(
       child: Stack(
-        fit: StackFit.expand,
+        alignment: Alignment.topCenter,
+        fit: StackFit.loose,
         children: [
           Stack(
+            alignment: Alignment.topCenter,
             fit: StackFit.loose,
             children: [
-              MarketDataInfoList(marketData: marketData),
+              SizedBox(
+                  width: kIsWeb ? 500 : null,
+                  child: MarketDataInfoList(marketData: marketData)),
               !isDataChanged
                   ? const SizedBox()
                   : ClipRRect(
@@ -112,14 +118,17 @@ class _MarketDataScreenState extends State<MarketDataScreen> {
                                   ? null
                                   : _onRefreshButtonPressed,
                             ),
-                      const SizedBox(
-                        height: 150,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 4,
                       ),
                     ],
                   ),
                 ),
-          MarketDataQueryBottomSheet(
-              marketData: marketData, onDataChanged: _onDataChanged)
+          Align(
+            alignment: AlignmentDirectional.bottomCenter,
+            child: MarketDataQueryBottomSheet(
+                marketData: marketData, onDataChanged: _onDataChanged),
+          )
         ],
       ),
     );

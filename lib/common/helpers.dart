@@ -81,6 +81,8 @@ class Helpers {
         return 'Bitcoin';
       case Coin.etherium:
         return 'Ehterium';
+      case Coin.binanceCoin:
+        return 'Binance Coin';
       default:
         return coin.toString();
     }

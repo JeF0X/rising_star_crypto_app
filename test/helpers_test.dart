@@ -20,12 +20,6 @@ void main() {
       final dayB = DateTime(2020, 1, 1, 2);
       expect(Helpers.isSameDay(dayA, dayB), true);
     });
-
-    test('same day in UTC, different timezone', () {
-      final dayA = DateTime.utc(2020, 1, 1, 23);
-      final dayB = DateTime(2020, 1, 2, 0);
-      expect(Helpers.isSameDay(dayA, dayB), true);
-    });
   });
 
   group('getDailyValuesWihtinRange', () {});
