@@ -1,6 +1,10 @@
 # Scrooge's crypto app
 
+<<<<<<< HEAD
 ![Video](/img/crypto_app_video.gif)
+=======
+![Video](/img/crypto_app_video.mp4)
+>>>>>>> 2d9428770a2bd00275dfaaa4d1093b07d466da67
 
 ## Getting Started
 
