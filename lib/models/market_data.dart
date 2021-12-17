@@ -11,7 +11,8 @@ import 'package:rising_star_crypto_app/services/crypto_data.dart';
 class MarketData {
   Currency currency;
   Coin coin;
-  final CryptoData database = CoinGeckoData(CoinGeckoService.instance);
+  CryptoData? database;
+  late CryptoData _database;
 
   late DateTimeRange dateRange;
 
@@ -23,17 +24,24 @@ class MarketData {
     required this.dateRange,
     required this.coin,
     required this.currency,
-  });
+    this.database,
+  }) {
+    if (database == null) {
+      _database = CoinGeckoData(CoinGeckoService.instance);
+    } else {
+      _database = database!;
+    }
+  }
 
   /// Update market data for this [MarketData] object
   Future<void> updateMarketData() async {
-    longestDownwardTrend = await _getLongestDownwardTrendWithinRange();
-    highestDailyTradingVolume = await _getHighestDailyTradingVolume();
-    bestBuySellTimes = await _getBestBuySellTimes();
+    longestDownwardTrend = await getLongestDownwardTrendWithinRange();
+    highestDailyTradingVolume = await getHighestDailyTradingVolume();
+    bestBuySellTimes = await getBestBuySellTimes();
   }
 
-  Future<List<DateValueData>> _getLongestDownwardTrendWithinRange() async {
-    var pricesWithinRange = await database.getDailyPricesWithinRange(
+  Future<List<DateValueData>> getLongestDownwardTrendWithinRange() async {
+    var pricesWithinRange = await _database.getDailyPricesWithinRange(
       coin: coin,
       vsCurrency: currency,
       from: dateRange.start,
@@ -43,9 +51,9 @@ class MarketData {
         values: pricesWithinRange, isDownward: true);
   }
 
-  Future<DateValueData> _getHighestDailyTradingVolume() async {
+  Future<DateValueData> getHighestDailyTradingVolume() async {
     var tradingVolumesWithinRange =
-        await database.getDailyTotalVolumesWithinRange(
+        await _database.getDailyTotalVolumesWithinRange(
       coin: coin,
       vsCurrency: currency,
       from: dateRange.start,
@@ -62,8 +70,8 @@ class MarketData {
     return highestEntry;
   }
 
-  Future<List<DateValueData>> _getBestBuySellTimes() async {
-    var dailyPrices = await database.getDailyPricesWithinRange(
+  Future<List<DateValueData>> getBestBuySellTimes() async {
+    var dailyPrices = await _database.getDailyPricesWithinRange(
       coin: coin,
       vsCurrency: currency,
       from: dateRange.start,

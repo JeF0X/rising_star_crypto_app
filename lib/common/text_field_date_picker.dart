@@ -37,45 +37,43 @@ class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
         color: color,
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: Expanded(
-        child: InkWell(
-          borderRadius: BorderRadius.circular(10.0),
-          onTap: () async {
-            var date = await showDatePicker(
-              initialDate: widget.initialDate ??
-                  DateTime.now().subtract(const Duration(days: 1)),
-              context: context,
-              firstDate: DateTime(2013, 1, 1),
-              lastDate: widget.lastDate,
-            );
-            if (date == null) {
-              return;
-            } else {
-              var utcDate = DateTime.utc(date.year, date.month, date.day);
-              setState(() {
-                dateText = '${utcDate.day}/${utcDate.month}/${utcDate.year}';
-              });
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10.0),
+        onTap: () async {
+          var date = await showDatePicker(
+            initialDate: widget.initialDate ??
+                DateTime.now().subtract(const Duration(days: 1)),
+            context: context,
+            firstDate: DateTime(2013, 1, 1),
+            lastDate: widget.lastDate,
+          );
+          if (date == null) {
+            return;
+          } else {
+            var utcDate = DateTime.utc(date.year, date.month, date.day);
+            setState(() {
+              dateText = '${utcDate.day}/${utcDate.month}/${utcDate.year}';
+            });
 
-              widget.onPressed(utcDate);
-            }
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
-                child: Icon(Icons.calendar_today_rounded),
+            widget.onPressed(utcDate);
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+              child: Icon(Icons.calendar_today_rounded),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
+              child: Text(
+                dateText,
+                style: const TextStyle(fontSize: 14.0),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
-                child: Text(
-                  dateText,
-                  style: const TextStyle(fontSize: 14.0),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
