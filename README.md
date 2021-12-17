@@ -1,14 +1,18 @@
 # Scrooge's crypto app
+Built with Flutter: https://flutter.dev/
+
 https://user-images.githubusercontent.com/32137436/146509599-a963bbe7-95d7-4fc4-b24f-e1127126b8f7.mp4
-## Getting Started
+## Try the app
+- Android: https://github.com/JeF0X/rising_star_crypto_app/releases/tag/v0.1
+- Web app: https://crypto-app-ec848.web.app
 
-This project is a starting point for a Flutter application.
+### Notes:
+- Web version works best on Chrome and other Chromium based browsers. 
+- The UI is only designed for mobile phones. User experience on desktop and other big screens may suffer.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+
