@@ -1,6 +1,6 @@
-# rising_star_crypto_app
+# Scrooge's crypto app
 
-A new Flutter project.
+![Video](img\crypto_app_video.mp4)
 
 ## Getting Started
 

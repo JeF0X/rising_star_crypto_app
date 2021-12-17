@@ -32,7 +32,7 @@ class _TextFieldDatePickerState extends State<TextFieldDatePicker> {
     }
 
     return Container(
-      constraints: const BoxConstraints(minWidth: 110.0, maxWidth: 150.0),
+      constraints: const BoxConstraints(maxWidth: 140.0),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(10.0),
