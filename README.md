@@ -1,10 +1,5 @@
 # Scrooge's crypto app
-
-![Video](https://user-images.githubusercontent.com/32137436/146509599-a963bbe7-95d7-4fc4-b24f-e1127126b8f7.mp4)
-
 https://user-images.githubusercontent.com/32137436/146509599-a963bbe7-95d7-4fc4-b24f-e1127126b8f7.mp4
-
-
 ## Getting Started
 
 This project is a starting point for a Flutter application.
