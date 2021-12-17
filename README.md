@@ -1,6 +1,6 @@
 # Scrooge's crypto app
 
-![Video](/img/crypto_app_video.gif)
+![Video](https://youtu.be/KJrWFfTM-cI)
 
 ## Getting Started
 
