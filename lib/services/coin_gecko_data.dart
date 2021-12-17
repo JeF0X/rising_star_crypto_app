@@ -146,14 +146,6 @@ class CoinGeckoData implements CryptoData {
       }
     }
 
-    // dailyEntries.removeWhere((item) => (item.date.isBefore(from)));
-    // dailyEntries.removeWhere((item) {
-    //   DateValueData firstDataPointOfLastDay = dailyEntries.firstWhere(
-    //       (element) => Helpers.isSameDay(element.date, to),
-    //       orElse: () => dailyEntries.last);
-    //   return item.date.isAfter(firstDataPointOfLastDay.date);
-    // });
-
     return dailyEntries;
   }
 

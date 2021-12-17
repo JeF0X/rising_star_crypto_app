@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rising_star_crypto_app/common/constants.dart';
 import 'package:rising_star_crypto_app/models/market_data.dart';
-import 'package:rising_star_crypto_app/screens/market_data_info_list.dart';
-import 'package:rising_star_crypto_app/screens/market_data_query_bottom_sheet.dart';
+import 'package:rising_star_crypto_app/market_data_screen/market_data_info_list.dart';
+import 'package:rising_star_crypto_app/market_data_screen/market_data_query_bottom_sheet.dart';
 
 class MarketDataScreen extends StatefulWidget {
   const MarketDataScreen({Key? key}) : super(key: key);

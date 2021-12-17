@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rising_star_crypto_app/screens/market_data_screen.dart';
+import 'package:rising_star_crypto_app/market_data_screen/market_data_screen.dart';
 
 import 'common/app_colors.dart';
 

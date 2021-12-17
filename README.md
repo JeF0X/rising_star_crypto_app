@@ -8,7 +8,7 @@ https://user-images.githubusercontent.com/32137436/146509599-a963bbe7-95d7-4fc4-
 
 ### Notes:
 - Web version works best on Chrome and other Chromium based browsers. 
-- The UI is only designed for mobile phones. User experience on desktop and other big screens may suffer.
+- For now the UI is only designed for mobile phones. User experience on desktop and other bigger screens may suffer.
 
 
 

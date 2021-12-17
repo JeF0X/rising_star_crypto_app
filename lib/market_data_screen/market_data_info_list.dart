@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:rising_star_crypto_app/common/bordeless_flat_card.dart';
-import 'package:rising_star_crypto_app/data_widgets/buy_and_sell_info.dart';
-import 'package:rising_star_crypto_app/data_widgets/highest_trading_volume_info.dart';
-import 'package:rising_star_crypto_app/data_widgets/longest_trend_info.dart';
 import 'package:rising_star_crypto_app/models/market_data.dart';
+import 'package:rising_star_crypto_app/market_data_screen/data_widgets/buy_and_sell_info.dart';
+import 'package:rising_star_crypto_app/market_data_screen/data_widgets/highest_trading_volume_info.dart';
+import 'package:rising_star_crypto_app/market_data_screen/data_widgets/longest_trend_info.dart';
 
 class MarketDataInfoList extends StatelessWidget {
   const MarketDataInfoList({
