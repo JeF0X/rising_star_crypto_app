@@ -1,7 +1,7 @@
 # Scrooge's crypto app
 
 ![Video](https://youtu.be/KJrWFfTM-cI)
-
+https://www.youtube.com/watch?v=KJrWFfTM-cI
 ## Getting Started
 
 This project is a starting point for a Flutter application.
